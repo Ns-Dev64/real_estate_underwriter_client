@@ -99,6 +99,8 @@ export function InvestmentCriteria({
     setLoading(true);
     
     try {
+      if(useMockData) localStorage.setItem("address",MOCK_PROPERTY_DETAILS.address);
+        
       const analysisData = useMockData ? {
         propertyDetails: MOCK_PROPERTY_DETAILS,
         t12Data: MOCK_T12_DATA,

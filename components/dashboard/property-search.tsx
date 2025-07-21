@@ -18,7 +18,7 @@ export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertyS
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSearch = async () => {
+   const handleSearch = async () => {
     if (!address.trim()) return;
 
     setLoading(true);
@@ -26,12 +26,13 @@ export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertyS
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/property?address=${address}`, {
+      localStorage.setItem("address",address);
+      const response = await fetch(`http://localhost:5001/api/v1/property?address=${address}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to fetch property details');
       }
