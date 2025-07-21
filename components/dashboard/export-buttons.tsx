@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import autoTable from 'jspdf-autotable'; // ✅ import this
 
 
 interface ExportButtonsProps {
