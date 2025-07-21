@@ -39,10 +39,12 @@ export function AnalysisResults({
     setSaveStatus('idle');
 
     try {
+      const token=localStorage.getItem("token");
       const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/deals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "Authorization":`Bearer ${token}`
         },
         body: JSON.stringify({
           deal: data
