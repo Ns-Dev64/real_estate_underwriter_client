@@ -27,7 +27,7 @@ export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertyS
     try {
       const token = localStorage.getItem('token');
       localStorage.setItem("address",address);
-      const response = await fetch(`http://localhost:5001/api/v1/property?address=${address}`, {
+      const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/property?address=${address}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
