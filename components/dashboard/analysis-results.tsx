@@ -2,8 +2,10 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, DollarSign, Calendar, PieChart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { TrendingUp, DollarSign, Calendar, PieChart, Save } from 'lucide-react';
 import { ExportButtons } from './export-buttons';
+import { useState } from 'react';
 
 interface AnalysisResultsProps {
   results: any;
@@ -22,6 +24,9 @@ export function AnalysisResults({
   buyBox, 
   assumptions 
 }: AnalysisResultsProps) {
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   const data = results.data || results;
   const metrics = data.metrics || {};
   const decision = data.decision || 'N/A';
@@ -29,17 +34,62 @@ export function AnalysisResults({
   const reasoning = data.reasoning || [];
   const risks = data.risks || [];
 
+  const handleSaveDeal = async () => {
+    setIsSaving(true);
+    setSaveStatus('idle');
+
+    try {
+      const response = await fetch('/api/v1/deals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          deal: data
+        }),
+      });
+
+      if (response.ok) {
+        setSaveStatus('success');
+        setTimeout(() => setSaveStatus('idle'), 3000); // Reset status after 3 seconds
+      } else {
+        setSaveStatus('error');
+      }
+    } catch (error) {
+      console.error('Error saving deal:', error);
+      setSaveStatus('error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="col-span-full space-y-6">
-      {/* Export Buttons */}
-      <ExportButtons
-        dealData={data}
-        propertyDetails={propertyDetails}
-        t12Data={t12Data}
-        rentRollData={rentRollData}
-        buyBox={buyBox}
-        assumptions={assumptions}
-      />
+      {/* Export Buttons and Save Deal Button */}
+      <div className="flex flex-wrap gap-4 items-center">
+        <ExportButtons
+          dealData={data}
+          propertyDetails={propertyDetails}
+          t12Data={t12Data}
+          rentRollData={rentRollData}
+          buyBox={buyBox}
+          assumptions={assumptions}
+        />
+        <Button 
+          onClick={handleSaveDeal}
+          disabled={isSaving}
+          variant={saveStatus === 'success' ? 'default' : saveStatus === 'error' ? 'destructive' : 'outline'}
+          className="flex items-center space-x-2"
+        >
+          <Save className="h-4 w-4" />
+          <span>
+            {isSaving ? 'Saving...' : 
+             saveStatus === 'success' ? 'Saved!' : 
+             saveStatus === 'error' ? 'Error - Retry' : 
+             'Save this Deal'}
+          </span>
+        </Button>
+      </div>
       
       {/* Analysis Results */}
       <Card>
