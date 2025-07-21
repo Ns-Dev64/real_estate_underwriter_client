@@ -201,7 +201,7 @@ export function ExportButtons({
        (dealData.metrics?.occupancy || 0) * 100 > 90 ? '✓' : '✗'],
     ];
     
-    autoTable(doc, {
+    (doc as any).autoTable({
       startY: yPosition,
       head: [metricsData[0]],
       body: metricsData.slice(1),
@@ -232,7 +232,7 @@ export function ExportButtons({
       ['Estimated Value', `$${(propertyDetails?.propertyEstimatedValue || 0).toLocaleString()}`],
     ];
     
-    autoTable(doc, {
+    (doc as any).autoTable({
       startY: yPosition,
       head: [propertyData[0]],
       body: propertyData.slice(1),
