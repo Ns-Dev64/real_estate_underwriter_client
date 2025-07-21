@@ -233,14 +233,14 @@ export function ExportButtons({
       ['Estimated Value', `$${(propertyDetails?.propertyEstimatedValue || 0).toLocaleString()}`],
     ];
     
-    (doc as any).autoTable({
-      startY: yPosition,
-      head: [propertyData[0]],
-      body: propertyData.slice(1),
-      theme: 'grid',
-      headStyles: { fillColor: [52, 152, 219] },
-      margin: { left: margin, right: margin },
-    });
+    autoTable(doc, {
+  startY: yPosition,
+  head: [propertyData[0]],
+  body: propertyData.slice(1),
+  theme: 'grid',
+  headStyles: { fillColor: [52, 152, 219] },
+  margin: { left: margin, right: margin },
+});
     
     yPosition = (doc as any).autoTable.previous.finalY + 20;
     
