@@ -3,12 +3,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, DollarSign, Calendar, PieChart } from 'lucide-react';
+import { ExportButtons } from './export-buttons';
 
 interface AnalysisResultsProps {
   results: any;
+  propertyDetails: any;
+  t12Data: any;
+  rentRollData: any;
+  buyBox: any;
+  assumptions: any;
 }
 
-export function AnalysisResults({ results }: AnalysisResultsProps) {
+export function AnalysisResults({ 
+  results, 
+  propertyDetails, 
+  t12Data, 
+  rentRollData, 
+  buyBox, 
+  assumptions 
+}: AnalysisResultsProps) {
   const data = results.data || results;
   const metrics = data.metrics || {};
   const decision = data.decision || 'N/A';
@@ -17,19 +30,31 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
   const risks = data.risks || [];
 
   return (
-    <Card className="col-span-full">
-      <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <TrendingUp className="h-5 w-5" />
-          <span>Analysis Results</span>
-          <Badge variant={decision === 'BUY' ? 'default' : decision === 'PASS' ? 'destructive' : 'secondary'}>
-            {decision}
-          </Badge>
-        </CardTitle>
-        <CardDescription>
-          Comprehensive deal analysis based on your inputs - Confidence: {confidence}
-        </CardDescription>
-      </CardHeader>
+    <div className="col-span-full space-y-6">
+      {/* Export Buttons */}
+      <ExportButtons
+        dealData={data}
+        propertyDetails={propertyDetails}
+        t12Data={t12Data}
+        rentRollData={rentRollData}
+        buyBox={buyBox}
+        assumptions={assumptions}
+      />
+      
+      {/* Analysis Results */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <TrendingUp className="h-5 w-5" />
+            <span>Analysis Results</span>
+            <Badge variant={decision === 'BUY' ? 'default' : decision === 'PASS' ? 'destructive' : 'secondary'}>
+              {decision}
+            </Badge>
+          </CardTitle>
+          <CardDescription>
+            Comprehensive deal analysis based on your inputs - Confidence: {confidence}
+          </CardDescription>
+        </CardHeader>
       <CardContent className="space-y-6">
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -134,7 +159,8 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
             {JSON.stringify(data, null, 2)}
           </pre>
         </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

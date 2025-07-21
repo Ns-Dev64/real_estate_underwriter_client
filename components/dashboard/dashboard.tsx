@@ -108,7 +108,14 @@ export function Dashboard() {
         </div>
 
         {analysisResults && (
-          <AnalysisResults results={analysisResults} />
+          <AnalysisResults 
+            results={analysisResults}
+            propertyDetails={propertyDetails}
+            t12Data={t12Data}
+            rentRollData={rentRollData}
+            buyBox={buyBox}
+            assumptions={assumptions}
+          />
         )}
       </main>
     </div>
