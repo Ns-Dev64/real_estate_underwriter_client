@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 interface ExportButtonsProps {
   dealData: any;
@@ -201,7 +201,7 @@ export function ExportButtons({
        (dealData.metrics?.occupancy || 0) * 100 > 90 ? '✓' : '✗'],
     ];
     
-    (doc as any).autoTable({
+    autoTable(doc, {
       startY: yPosition,
       head: [metricsData[0]],
       body: metricsData.slice(1),
@@ -210,7 +210,7 @@ export function ExportButtons({
       margin: { left: margin, right: margin },
     });
     
-    yPosition = (doc as any).lastAutoTable.finalY + 20;
+    yPosition = (doc as any).autoTable.previous.finalY + 20;
     
     // Property Details
     if (yPosition > 200) {
@@ -232,7 +232,7 @@ export function ExportButtons({
       ['Estimated Value', `$${(propertyDetails?.propertyEstimatedValue || 0).toLocaleString()}`],
     ];
     
-    (doc as any).autoTable({
+    autoTable(doc, {
       startY: yPosition,
       head: [propertyData[0]],
       body: propertyData.slice(1),
@@ -241,7 +241,7 @@ export function ExportButtons({
       margin: { left: margin, right: margin },
     });
     
-    yPosition = (doc as any).lastAutoTable.finalY + 20;
+    yPosition = (doc as any).autoTable.previous.finalY + 20;
     
     // Analysis Reasoning
     if (yPosition > 200) {

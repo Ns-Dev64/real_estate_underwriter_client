@@ -79,7 +79,19 @@ export function InvestmentCriteria({
       });
 
       if (!response.ok) {
-        throw new Error('Analysis failed');
+        let errorMessage = 'Analysis failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || `Analysis failed with status ${response.status}`;
+        } catch {
+          try {
+            const errorText = await response.text();
+            errorMessage = errorText || `Analysis failed with status ${response.status}`;
+          } catch {
+            errorMessage = `Analysis failed with status ${response.status}`;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const results = await response.json();
