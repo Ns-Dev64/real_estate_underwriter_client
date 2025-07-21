@@ -95,7 +95,7 @@ export function Dashboard() {
         const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/deals',{
           method:'GET',
           headers:{
-            'Authorization':`Bearer:${token}`
+            'Authorization':`Bearer ${token}`
           }
         });
         
@@ -137,7 +137,7 @@ export function Dashboard() {
       const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/deals/${dealId}`, {
         method: 'DELETE',
         headers:{
-          'Authorization':`Bearer:${token}`
+          'Authorization':`Bearer ${token}`
         }
       });
 
