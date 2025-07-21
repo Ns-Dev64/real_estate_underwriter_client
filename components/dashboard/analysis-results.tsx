@@ -53,7 +53,7 @@ export function AnalysisResults({
 
       if (response.ok) {
         setSaveStatus('success');
-        setTimeout(() => setSaveStatus('idle'), 3000); 
+        setTimeout(() => setSaveStatus('idle'), 3000); // Reset status after 3 seconds
       } else {
         setSaveStatus('error');
       }
