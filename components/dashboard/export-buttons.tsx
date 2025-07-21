@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download, FileSpreadsheet, FileText } from 'lucide-react';
-import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import autoTable from 'jspdf-autotable'; // ✅ import this
 
 
@@ -202,7 +202,7 @@ export function ExportButtons({
        (dealData.metrics?.occupancy || 0) * 100 > 90 ? '✓' : '✗'],
     ];
     
-    (doc as any).autoTable({
+    autoTable(doc, {
       startY: yPosition,
       head: [metricsData[0]],
       body: metricsData.slice(1),
@@ -211,7 +211,6 @@ export function ExportButtons({
       margin: { left: margin, right: margin },
     });
     
-    yPosition = (doc as any).autoTable.previous.finalY + 20;
     
     // Property Details
     if (yPosition > 200) {
@@ -234,15 +233,14 @@ export function ExportButtons({
     ];
     
     autoTable(doc, {
-  startY: yPosition,
-  head: [propertyData[0]],
-  body: propertyData.slice(1),
-  theme: 'grid',
-  headStyles: { fillColor: [52, 152, 219] },
-  margin: { left: margin, right: margin },
-});
+      startY: yPosition,
+      head: [propertyData[0]],
+      body: propertyData.slice(1),
+      theme: 'grid',
+      headStyles: { fillColor: [52, 152, 219] },
+      margin: { left: margin, right: margin },
+    });
     
-    yPosition = (doc as any).autoTable.previous.finalY + 20;
     
     // Analysis Reasoning
     if (yPosition > 200) {
