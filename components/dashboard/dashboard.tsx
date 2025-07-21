@@ -90,8 +90,14 @@ export function Dashboard() {
       try {
         setIsLoadingDeals(true);
         setDealsError(null);
-        
-        const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/deals');
+
+        const token=localStorage.getItem("token");
+        const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/deals',{
+          method:'GET',
+          headers:{
+            'Authorization':`Bearer:${token}`
+          }
+        });
         
         if (response.ok) {
           const deals = await response.json();
@@ -127,8 +133,12 @@ export function Dashboard() {
     }
 
     try {
+      const token=localStorage.getItem("token");
       const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/deals/${dealId}`, {
         method: 'DELETE',
+        headers:{
+          'Authorization':`Bearer:${token}`
+        }
       });
 
       if (response.ok) {
