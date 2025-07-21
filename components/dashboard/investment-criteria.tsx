@@ -10,6 +10,49 @@ import { Badge } from '@/components/ui/badge';
 import { Calculator, Loader2, Plus, X } from 'lucide-react';
 import { BuyBox, Assumptions } from './dashboard';
 
+// Mock data for testing
+const MOCK_PROPERTY_DETAILS = {
+  address: "4529 Winona Court, Denver, CO 80212",
+  propertyType: "Multi-Family",
+  propertyYear: 1985,
+  propertyUnit: 32,
+  propertyCrimeRating: "B+",
+  propertyMedianIncome: 65000,
+  propertyAvgIncome: 58000,
+  propertyEstimatedValue: 4900000,
+  propertyMinValue: 4500000,
+  propertyMaxValue: 5300000,
+  propertySchoolsAndRating: [
+    { InstitutionName: "Denver Elementary", schoolRating: "8/10" },
+    { InstitutionName: "Jefferson Middle School", schoolRating: "7/10" },
+    { InstitutionName: "Washington High School", schoolRating: "9/10" }
+  ]
+};
+
+const MOCK_T12_DATA = {
+  totalIncome: 1200000,
+  totalExpenses: 465000,
+  netOperatingIncome: 735000,
+  grossRentalIncome: 1150000,
+  otherIncome: 50000,
+  operatingExpenses: 465000,
+  vacancy: 0.05
+};
+
+const MOCK_RENT_ROLL_DATA = {
+  totalUnits: 32,
+  occupiedUnits: 28,
+  occupancyRate: 87.5,
+  totalRent: 96000,
+  averageRent: 3000,
+  units: [
+    { unit: "101", rent: 2800, occupied: true, tenant: "John Doe" },
+    { unit: "102", rent: 3200, occupied: true, tenant: "Jane Smith" },
+    { unit: "103", rent: 2900, occupied: false, tenant: null },
+    { unit: "104", rent: 3100, occupied: true, tenant: "Bob Johnson" }
+  ]
+};
+
 interface InvestmentCriteriaProps {
   buyBox: BuyBox;
   assumptions: Assumptions;
@@ -31,6 +74,7 @@ export function InvestmentCriteria({
 }: InvestmentCriteriaProps) {
   const [loading, setLoading] = useState(false);
   const [newMarket, setNewMarket] = useState('');
+  const [useMockData, setUseMockData] = useState(false);
 
   const addMarket = () => {
     if (newMarket.trim() && !buyBox.preferredMarkets.includes(newMarket.trim())) {
@@ -50,12 +94,18 @@ export function InvestmentCriteria({
   };
 
   const handleAnalyze = async () => {
-    if (!canAnalyze) return;
+    if (!canAnalyze && !useMockData) return;
 
     setLoading(true);
     
     try {
-      const analysisData = onAnalyze();
+      const analysisData = useMockData ? {
+        propertyDetails: MOCK_PROPERTY_DETAILS,
+        t12Data: MOCK_T12_DATA,
+        rentRollData: MOCK_RENT_ROLL_DATA,
+        buyBox,
+        assumptions,
+      } : onAnalyze();
       
       const payload = {
         userData: {
@@ -270,9 +320,22 @@ export function InvestmentCriteria({
         </Tabs>
         
         <div className="pt-4 border-t">
+          <div className="flex items-center space-x-2 mb-4">
+            <input
+              type="checkbox"
+              id="useMockData"
+              checked={useMockData}
+              onChange={(e) => setUseMockData(e.target.checked)}
+              className="rounded border-gray-300"
+            />
+            <Label htmlFor="useMockData" className="text-sm">
+              Use mock data for testing (bypasses file uploads)
+            </Label>
+          </div>
+          
           <Button 
             onClick={handleAnalyze} 
-            disabled={!canAnalyze || loading}
+            disabled={(!canAnalyze && !useMockData) || loading}
             className="w-full"
             size="lg"
           >
@@ -284,14 +347,14 @@ export function InvestmentCriteria({
             ) : (
               <>
                 <Calculator className="mr-2 h-5 w-5" />
-                Analyze Deal
+                {useMockData ? 'Analyze Deal (Mock Data)' : 'Analyze Deal'}
               </>
             )}
           </Button>
           
-          {!canAnalyze && (
+          {!canAnalyze && !useMockData && (
             <p className="text-sm text-muted-foreground mt-2 text-center">
-              Please complete property search and file uploads to analyze
+              Please complete property search and file uploads to analyze, or use mock data for testing
             </p>
           )}
         </div>
