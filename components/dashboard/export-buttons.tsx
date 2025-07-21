@@ -6,6 +6,8 @@ import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable'; // ✅ import this
+(autoTable as any)(jsPDF);
+
 
 interface ExportButtonsProps {
   dealData: any;
