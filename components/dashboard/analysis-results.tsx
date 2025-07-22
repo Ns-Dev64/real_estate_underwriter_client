@@ -60,8 +60,8 @@ export function AnalysisResults({
       if (response.ok) {
         const savedDeal = await response.json();
         // Update the results with the saved deal ID to prevent duplicate saves
-        if (savedDeal._id) {
-          results._id = savedDeal._id;
+        if (savedDeal.data) {
+          results._id = savedDeal.data;
         }
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
