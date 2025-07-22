@@ -41,6 +41,9 @@ export function AnalysisResults({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Check if deal is already saved
+  const isDealSaved = results?._id || isFromSavedDeal;
+
   const handleSaveDeal = async () => {
     setSaving(true);
     try {
@@ -55,6 +58,11 @@ export function AnalysisResults({
       });
 
       if (response.ok) {
+        const savedDeal = await response.json();
+        // Update the results with the saved deal ID to prevent duplicate saves
+        if (savedDeal._id) {
+          results._id = savedDeal._id;
+        }
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
       }
@@ -108,7 +116,7 @@ export function AnalysisResults({
                 <CardDescription>AI-powered analysis results</CardDescription>
               </div>
             </div>
-            {!isFromSavedDeal && (
+            {!isDealSaved && (
               <Button 
                 onClick={handleSaveDeal}
                 disabled={saving || saved}
