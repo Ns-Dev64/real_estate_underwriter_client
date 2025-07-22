@@ -152,7 +152,7 @@ export function InvestmentCriteria({
       }
 
       const results = await response.json();
-      onAnalysisComplete(results);
+      onAnalysisComplete(results.data || results);
     } catch (err) {
       console.error('Analysis failed:', err);
     } finally {
