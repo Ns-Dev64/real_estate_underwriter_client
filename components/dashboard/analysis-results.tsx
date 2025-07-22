@@ -51,7 +51,7 @@ export function AnalysisResults({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(results),
+        body: JSON.stringify({deal:results}),
       });
 
       if (response.ok) {
