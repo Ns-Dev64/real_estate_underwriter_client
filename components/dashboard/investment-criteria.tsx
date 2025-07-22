@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Calculator, Loader2, Plus, X } from 'lucide-react';
 import { BuyBox, Assumptions } from './dashboard';
 
@@ -77,6 +78,7 @@ export function InvestmentCriteria({
   const [loading, setLoading] = useState(false);
   const [newMarket, setNewMarket] = useState('');
   const [useMockData, setUseMockData] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const addMarket = () => {
     if (newMarket.trim() && !buyBox.preferredMarkets.includes(newMarket.trim())) {
@@ -102,6 +104,7 @@ export function InvestmentCriteria({
     onAnalysisStart?.();
 
     setLoading(true);
+    setError(null);
     
     try {
       if(useMockData) localStorage.setItem("address",MOCK_PROPERTY_DETAILS.address);
@@ -155,6 +158,7 @@ export function InvestmentCriteria({
       onAnalysisComplete(results.data || results);
     } catch (err) {
       console.error('Analysis failed:', err);
+      setError(err instanceof Error ? err.message : 'Analysis failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -327,6 +331,12 @@ export function InvestmentCriteria({
         </Tabs>
         
         <div className="pt-4 border-t">
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
           <div className="flex items-center space-x-2 mb-4">
             <input
               type="checkbox"
