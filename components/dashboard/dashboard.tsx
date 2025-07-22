@@ -118,14 +118,22 @@ export function Dashboard() {
   }, []);
 
   const handleViewDeal = (deal: SavedDeal) => {
-    // Load the deal data into the current analysis - the deal data is the saved deal itself
-    setAnalysisResults(deal);
-    setIsFromSavedDeal(true);
-    
-    // Optionally scroll to the analysis results
-    const resultsElement = document.getElementById('analysis-results');
-    if (resultsElement) {
-      resultsElement.scrollIntoView({ behavior: 'smooth' });
+    // If the same deal is already being viewed, close it
+    if (analysisResults && analysisResults._id === deal._id) {
+      setAnalysisResults(null);
+      setIsFromSavedDeal(false);
+    } else {
+      // Load the deal data into the current analysis - the deal data is the saved deal itself
+      setAnalysisResults(deal);
+      setIsFromSavedDeal(true);
+      
+      // Optionally scroll to the analysis results
+      setTimeout(() => {
+        const resultsElement = document.getElementById('analysis-results');
+        if (resultsElement) {
+          resultsElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   };
 
