@@ -14,6 +14,7 @@ interface AnalysisResultsProps {
   rentRollData: any;
   buyBox: any;
   assumptions: any;
+  isFromSavedDeal?: boolean;
 }
 
 export function AnalysisResults({ 
@@ -22,7 +23,8 @@ export function AnalysisResults({
   t12Data, 
   rentRollData, 
   buyBox, 
-  assumptions 
+  assumptions,
+  isFromSavedDeal = false
 }: AnalysisResultsProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -77,20 +79,22 @@ export function AnalysisResults({
           buyBox={buyBox}
           assumptions={assumptions}
         />
-        <Button 
-          onClick={handleSaveDeal}
-          disabled={isSaving}
-          variant={saveStatus === 'success' ? 'default' : saveStatus === 'error' ? 'destructive' : 'outline'}
-          className="flex items-center space-x-2"
-        >
-          <Save className="h-4 w-4" />
-          <span>
-            {isSaving ? 'Saving...' : 
-             saveStatus === 'success' ? 'Saved!' : 
-             saveStatus === 'error' ? 'Error - Retry' : 
-             'Save this Deal'}
-          </span>
-        </Button>
+        {!isFromSavedDeal && (
+          <Button 
+            onClick={handleSaveDeal}
+            disabled={isSaving}
+            variant={saveStatus === 'success' ? 'default' : saveStatus === 'error' ? 'destructive' : 'outline'}
+            className="flex items-center space-x-2"
+          >
+            <Save className="h-4 w-4" />
+            <span>
+              {isSaving ? 'Saving...' : 
+               saveStatus === 'success' ? 'Saved!' : 
+               saveStatus === 'error' ? 'Error - Retry' : 
+               'Save this Deal'}
+            </span>
+          </Button>
+        )}
       </div>
       
       {/* Analysis Results */}

@@ -83,6 +83,7 @@ export function Dashboard() {
   const [savedDeals, setSavedDeals] = useState<SavedDeal[]>([]);
   const [isLoadingDeals, setIsLoadingDeals] = useState(true);
   const [dealsError, setDealsError] = useState<string | null>(null);
+  const [isFromSavedDeal, setIsFromSavedDeal] = useState(false);
 
   // Fetch saved deals on component mount
   useEffect(() => {
@@ -119,6 +120,7 @@ export function Dashboard() {
   const handleViewDeal = (deal: SavedDeal) => {
     // Load the deal data into the current analysis - the deal data is the saved deal itself
     setAnalysisResults(deal);
+    setIsFromSavedDeal(true);
     
     // Optionally scroll to the analysis results
     const resultsElement = document.getElementById('analysis-results');
@@ -194,6 +196,7 @@ export function Dashboard() {
               })}
               onAnalysisComplete={setAnalysisResults}
               canAnalyze={!!(propertyDetails && t12Data && rentRollData)}
+              onAnalysisStart={() => setIsFromSavedDeal(false)}
             />
           </div>
         </div>
@@ -311,6 +314,7 @@ export function Dashboard() {
               rentRollData={rentRollData}
               buyBox={buyBox}
               assumptions={assumptions}
+              isFromSavedDeal={isFromSavedDeal}
             />
           </div>
         )}
