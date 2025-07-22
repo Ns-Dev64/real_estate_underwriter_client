@@ -197,6 +197,7 @@ export function Dashboard() {
               onAnalysisComplete={setAnalysisResults}
               canAnalyze={!!(propertyDetails && t12Data && rentRollData)}
               onAnalysisStart={() => setIsFromSavedDeal(false)}
+              onAnalysisStart={() => setIsFromSavedDeal(false)}
             />
           </div>
         </div>

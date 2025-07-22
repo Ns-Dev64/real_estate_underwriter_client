@@ -61,6 +61,7 @@ interface InvestmentCriteriaProps {
   onAnalyze: () => any;
   onAnalysisComplete: (results: any) => void;
   canAnalyze: boolean;
+  onAnalysisStart?: () => void;
 }
 
 export function InvestmentCriteria({
@@ -71,6 +72,7 @@ export function InvestmentCriteria({
   onAnalyze,
   onAnalysisComplete,
   canAnalyze,
+  onAnalysisStart,
 }: InvestmentCriteriaProps) {
   const [loading, setLoading] = useState(false);
   const [newMarket, setNewMarket] = useState('');
@@ -95,6 +97,9 @@ export function InvestmentCriteria({
 
   const handleAnalyze = async () => {
     if (!canAnalyze && !useMockData) return;
+
+    // Notify that a new analysis is starting
+    onAnalysisStart?.();
 
     setLoading(true);
     
