@@ -63,7 +63,7 @@ interface InvestmentCriteriaProps {
   canAnalyze: boolean;
 }
 
-export function InvestmentCriteria({
+export function AnalysisResults({
   buyBox,
   assumptions,
   onBuyBoxChange,
