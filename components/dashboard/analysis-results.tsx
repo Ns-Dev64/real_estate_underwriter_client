@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { config } from '@/lib/config';
 import { ExportButtons } from './export-buttons';
 import { 
   TrendingUp, 
@@ -48,7 +49,7 @@ export function AnalysisResults({
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/deals', {
+      const response = await fetch(`${config.BACKEND_URL}/deals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

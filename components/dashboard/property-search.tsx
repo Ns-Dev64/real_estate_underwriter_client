@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, Loader2, CheckCircle } from 'lucide-react';
 import { PropertyDetails } from './dashboard';
-
+import {config} from "@/lib/config"
 interface PropertySearchProps {
   onPropertyDetails: (details: PropertyDetails) => void;
   propertyDetails: PropertyDetails | null;
@@ -27,7 +27,7 @@ export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertyS
     try {
       const token = localStorage.getItem('token');
       localStorage.setItem("address",address);
-      const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/property?address=${address}`, {
+      const response = await fetch(`${config.BACKEND_URL}/property?address=${address}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload, FileText, Loader2, CheckCircle } from 'lucide-react';
+import { Upload, FileText, Loader2, CheckCircle, X, AlertTriangle } from 'lucide-react';
 import { T12Data, RentRollData } from './dashboard';
-
+import { config } from '@/lib/config';
 interface FileUploadsProps {
   onT12Upload: (data: T12Data) => void;
   onRentRollUpload: (data: RentRollData) => void;
@@ -17,6 +17,49 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
   const [t12Loading, setT12Loading] = useState(false);
   const [rentRollLoading, setRentRollLoading] = useState(false);
   const [errors, setErrors] = useState<{ t12?: string; rentRoll?: string }>({});
+  const [t12File, setT12File] = useState<File | null>(null);
+  const [rentRollFile, setRentRollFile] = useState<File | null>(null);
+
+  // File integrity validation
+  const validateFileIntegrity = async (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          // Check if file content is readable
+          const content = reader.result;
+          if (!content || (typeof content === 'string' && content.length === 0)) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        } catch (error) {
+          resolve(false);
+        }
+      };
+      reader.onerror = () => resolve(false);
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
+  // Additional file validation
+  const validateFile = (file: File, type: 't12' | 'rentRoll'): string | null => {
+    // Check file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      return 'File size must be less than 10MB';
+    }
+
+    // Check file type
+    const allowedTypes = type === 't12' 
+      ? ['application/pdf', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']
+      : ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+    
+    if (!allowedTypes.includes(file.type)) {
+      return `Invalid file type. Please upload ${type === 't12' ? 'PDF or Excel' : 'CSV or Excel'} files only.`;
+    }
+
+    return null;
+  };
 
   const handleT12Upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -26,11 +69,26 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
     setErrors({ ...errors, t12: '' });
 
     try {
+      // Validate file
+      const validationError = validateFile(file, 't12');
+      if (validationError) {
+        setErrors({ ...errors, t12: validationError });
+        return;
+      }
+
+      // Check file integrity
+      const isValid = await validateFileIntegrity(file);
+      if (!isValid) {
+        setErrors({ ...errors, t12: 'File appears to be corrupted. Please try a different file.' });
+        return;
+      }
+
+      setT12File(file);
       const formData = new FormData();
       formData.append('file', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/t12', {
+      const response = await fetch(`${config.BACKEND_URL}/t12`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -59,11 +117,26 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
     setErrors({ ...errors, rentRoll: '' });
 
     try {
+      // Validate file
+      const validationError = validateFile(file, 'rentRoll');
+      if (validationError) {
+        setErrors({ ...errors, rentRoll: validationError });
+        return;
+      }
+
+      // Check file integrity
+      const isValid = await validateFileIntegrity(file);
+      if (!isValid) {
+        setErrors({ ...errors, rentRoll: 'File appears to be corrupted. Please try a different file.' });
+        return;
+      }
+
+      setRentRollFile(file);
       const formData = new FormData();
       formData.append('file', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/rent', {
+      const response = await fetch(`${config.BACKEND_URL}/rent`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -82,6 +155,25 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
     } finally {
       setRentRollLoading(false);
     }
+  };
+
+  // Remove file functions
+  const removeT12File = () => {
+    setT12File(null);
+    onT12Upload(null as any); // Clear the data
+    setErrors({ ...errors, t12: '' });
+    // Reset file input
+    const fileInput = document.getElementById('t12-input') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  };
+
+  const removeRentRollFile = () => {
+    setRentRollFile(null);
+    onRentRollUpload(null as any); // Clear the data
+    setErrors({ ...errors, rentRoll: '' });
+    // Reset file input
+    const fileInput = document.getElementById('rentroll-input') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   };
 
   return (
@@ -110,6 +202,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
           
           <div className="flex items-center space-x-2">
             <input
+              id="t12-input"
               type="file"
               accept=".pdf,.xlsx,.xls"
               onChange={handleT12Upload}
@@ -117,6 +210,17 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
               className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
             />
             {t12Loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            {(t12Data || t12File) && !t12Loading && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={removeT12File}
+                className="flex items-center space-x-1 text-destructive hover:text-destructive"
+              >
+                <X className="h-3 w-3" />
+                <span>Remove</span>
+              </Button>
+            )}
           </div>
           
           {errors.t12 && (
@@ -160,6 +264,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
           
           <div className="flex items-center space-x-2">
             <input
+              id="rentroll-input"
               type="file"
               accept=".csv,.xlsx,.xls"
               onChange={handleRentRollUpload}
@@ -167,6 +272,17 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
               className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
             />
             {rentRollLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+            {(rentRollData || rentRollFile) && !rentRollLoading && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={removeRentRollFile}
+                className="flex items-center space-x-1 text-destructive hover:text-destructive"
+              >
+                <X className="h-3 w-3" />
+                <span>Remove</span>
+              </Button>
+            )}
           </div>
           
           {errors.rentRoll && (

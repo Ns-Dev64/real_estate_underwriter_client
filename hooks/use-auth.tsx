@@ -31,10 +31,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     if (token && userData) {
       try {
-        setUser(JSON.parse(userData));
+        // Try to parse as JSON first (new format)
+        const parsedUser = JSON.parse(userData);
+        
+        // Clean the userName if it has trailing characters
+        if (parsedUser.userName) {
+          parsedUser.userName = parsedUser.userName.replace(/[)}\s]+$/, '').trim();
+        }
+        if (parsedUser.email) {
+          parsedUser.email = parsedUser.email.replace(/[)}\s]+$/, '').trim();
+        }
+                
+        // Update localStorage with cleaned data
+        localStorage.setItem('user', JSON.stringify(parsedUser));
+        setUser(parsedUser);
       } catch (error) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        // If JSON parsing fails, assume it's old format (plain string)
+        // Convert old format to new format
+        const cleanedUserName = decodeURIComponent(userData).replace(/[)}\s]+$/, '').trim();
+        const userPayload = {
+          id: 'user-id',
+          email: '', // We don't have email in old format
+          userName: cleanedUserName
+        };
+        console.log('Converted old format user:', userPayload.userName);
+        // Update localStorage with new format
+        localStorage.setItem('user', JSON.stringify(userPayload));
+        setUser(userPayload);
       }
     }
     setLoading(false);
@@ -88,7 +111,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const contextValue = { user, loading, login, register, logout, setUser };
+  // Enhanced setUser function that also persists to localStorage
+  const setUserWithPersistence = (newUser: User | null) => {
+    console.log('setUserWithPersistence called with:', newUser);
+    setUser(newUser);
+    if (newUser) {
+      localStorage.setItem('user', JSON.stringify(newUser));
+    } else {
+      localStorage.removeItem('user');
+    }
+  };
+
+  const contextValue = { user, loading, login, register, logout, setUser: setUserWithPersistence };
 
   return (
     <AuthContext.Provider value={contextValue}>
