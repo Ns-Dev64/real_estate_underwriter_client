@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import { config } from '@/lib/config';
 
 interface User {
   id: string;
@@ -14,6 +15,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, userName: string, password: string) => Promise<void>;
   logout: () => void;
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -39,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/login', {
+    const response = await fetch(`${config.BACKEND_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (email: string, userName: string, password: string) => {
-    const response = await fetch('https://real-estate-underwriter-server.onrender.com/api/v1/register', {
+    const response = await fetch(`${config.BACKEND_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const contextValue = { user, loading, login, register, logout };
+  const contextValue = { user, loading, login, register, logout, setUser };
 
   return (
     <AuthContext.Provider value={contextValue}>

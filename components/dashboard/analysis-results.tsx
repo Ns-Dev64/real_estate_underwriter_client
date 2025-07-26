@@ -217,7 +217,7 @@ export function AnalysisResults({
                 {(metrics.dscr || 0).toFixed(2)}
               </p>
               <div className="flex items-center space-x-1">
-                <span className="text-xs text-muted-foreground">Target: > 1.25</span>
+                <span className="text-xs text-muted-foreground">Target: `{`>`}` 1.25</span>
                 {(metrics.dscr || 0) > 1.25 ? (
                   <TrendingUp className="h-3 w-3 text-green-500" />
                 ) : (

@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Clock } from 'lucide-react';
+import { GoogleOAuthButton } from './google-oauth-button';
+import { Separator } from '@/components/ui/separator';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -43,7 +45,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
       {error && (
         <Alert variant="destructive">
           <AlertDescription>{error}</AlertDescription>
@@ -58,6 +60,22 @@ export function LoginForm() {
           </AlertDescription>
         </Alert>
       )}
+      
+      {/* Google OAuth Button */}
+      <GoogleOAuthButton disabled={loading} />
+      
+      {/* Separator */}
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <Separator className="w-full" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">Or continue with email</span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Email/Password Form Fields */}
       
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
@@ -83,10 +101,11 @@ export function LoginForm() {
         />
       </div>
       
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Sign In
-      </Button>
-    </form>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Sign In
+        </Button>
+      </form>
+    </div>
   );
 }
