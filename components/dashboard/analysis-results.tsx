@@ -17,7 +17,8 @@ import {
   Percent, 
   Calculator,
   Save,
-  Loader2
+  Loader2,
+  Lightbulb
 } from 'lucide-react';
 
 interface AnalysisResultsProps {
@@ -97,6 +98,7 @@ export function AnalysisResults({
   const confidence = results?.confidence || 'N/A';
   const reasoning = results?.reasoning || [];
   const risks = results?.risks || [];
+  const advice = results?.advice || [];
 
   return (
     <div className="space-y-6">
@@ -218,7 +220,7 @@ export function AnalysisResults({
                 {(metrics.dscr || 0).toFixed(2)}
               </p>
               <div className="flex items-center space-x-1">
-                <span className="text-xs text-muted-foreground">Target: `{`>`}` 1.25</span>
+                <span className="text-xs text-muted-foreground">Target: {">  1.25"}</span>
                 {(metrics.dscr || 0) > 1.25 ? (
                   <TrendingUp className="h-3 w-3 text-green-500" />
                 ) : (
@@ -260,6 +262,7 @@ export function AnalysisResults({
           <Tabs defaultValue="reasoning" className="space-y-4">
             <TabsList>
               <TabsTrigger value="reasoning">Reasoning</TabsTrigger>
+              <TabsTrigger value="advice">Advice</TabsTrigger>
               <TabsTrigger value="risks">Risk Factors</TabsTrigger>
               <TabsTrigger value="metrics">All Metrics</TabsTrigger>
             </TabsList>
@@ -278,6 +281,21 @@ export function AnalysisResults({
                 </div>
               ) : (
                 <p className="text-muted-foreground">No reasoning provided.</p>
+              )}
+            </TabsContent>
+
+            <TabsContent value="advice" className="space-y-3">
+              {advice.length > 0 ? (
+                <div className="space-y-3">
+                  {advice.map((adviceItem: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-800">
+                      <Lightbulb className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm leading-relaxed text-blue-900 dark:text-blue-100">{adviceItem}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted-foreground">No specific advice provided.</p>
               )}
             </TabsContent>
             

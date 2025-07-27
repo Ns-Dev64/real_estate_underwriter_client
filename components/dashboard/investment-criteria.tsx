@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Calculator, Loader2, Plus, X, Sparkles } from "lucide-react"
 import type { BuyBox, Assumptions } from "./dashboard"
+import {config} from "@/lib/config"
 
 // Mock data for testing
 const MOCK_PROPERTY_DETAILS = {
@@ -132,7 +133,7 @@ export function InvestmentCriteria({
 
       console.log(payload)
       const token = localStorage.getItem("token")
-      const response = await fetch("https://real-estate-underwriter-server.onrender.com/api/v1/deal", {
+      const response = await fetch(`${config.BACKEND_URL}/deal`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

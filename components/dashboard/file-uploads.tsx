@@ -103,7 +103,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
       const data = await response.json();
       onT12Upload(data.data);
     } catch (err) {
-      setErrors({ ...errors, t12: 'Failed to upload T12 file. Please try again.' });
+      setErrors({ ...errors, t12: 'Failed to upload T12 file. File might be corrupted, please try again.' });
     } finally {
       setT12Loading(false);
     }

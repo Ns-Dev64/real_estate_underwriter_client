@@ -30,6 +30,7 @@ import {
   RotateCcw,
   RefreshCw,
 } from "lucide-react"
+import {config} from "@/lib/config"
 
 export interface PropertyDetails {
   address: string
@@ -342,7 +343,7 @@ export function Dashboard() {
         setIsLoadingDeals(true)
         setDealsError(null)
         const token = localStorage.getItem("token")
-        const response = await fetch("https://real-estate-underwriter-server.onrender.com/api/v1/deals", {
+        const response = await fetch(`${config.BACKEND_URL}/deals`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -371,7 +372,7 @@ export function Dashboard() {
       setIsLoadingDeals(true)
       setDealsError(null)
       const token = localStorage.getItem("token")
-      const response = await fetch("https://real-estate-underwriter-server.onrender.com/api/v1/deals", {
+      const response = await fetch(`${config.BACKEND_URL}/deals`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -427,7 +428,7 @@ export function Dashboard() {
 
     try {
       const token = localStorage.getItem("token")
-      const response = await fetch(`https://real-estate-underwriter-server.onrender.com/api/v1/deals/${dealId}`, {
+      const response = await fetch(`${config.BACKEND_URL}/deals/${dealId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
