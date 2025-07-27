@@ -330,7 +330,7 @@ export function AuthTabs() {
                 </div>
 
                 {/* Demo CTA */}
-                <div className="pt-4 border-t animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out delay-800">
+                {/* <div className="pt-4 border-t animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out delay-800">
                   <Button
                     variant="outline"
                     className="w-full bg-transparent hover:bg-primary/5 hover:scale-105 transition-all duration-300"
@@ -339,7 +339,7 @@ export function AuthTabs() {
                     <Play className="h-4 w-4 mr-2 animate-pulse" />
                     Watch 2-Minute Demo
                   </Button>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
 
