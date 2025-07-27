@@ -482,13 +482,28 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <Header />
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/3 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/3 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute top-1/3 left-1/3 w-60 h-60 bg-indigo-500/2 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "4s" }}
+        />
+      </div>
+
+      <div className="animate-in fade-in slide-in-from-top-4 duration-700 ease-out">
+        <Header />
+      </div>
 
       <main className="container mx-auto px-4 py-6 space-y-8">
         {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+        <div className="text-center mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-100">
+          <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent animate-pulse">
             Real Estate Deal Analyzer
           </h1>
           <p className="text-lg text-muted-foreground mb-6">
@@ -497,7 +512,7 @@ export function Dashboard() {
         </div>
 
         {/* Demo CTA Section */}
-        <Card className="border-2 border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+        <Card className="border-2 border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-200 hover:shadow-lg hover:scale-[1.01] transition-all">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-2">
@@ -508,14 +523,17 @@ export function Dashboard() {
                 </p>
               </div>
               <div className="flex space-x-3">
-                <Button onClick={handleLoadDemoData} className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+                <Button
+                  onClick={handleLoadDemoData}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 hover:scale-105 transition-all duration-300"
+                >
                   Try Demo Data
                 </Button>
                 <Button
                   onClick={handleResetAll}
                   disabled={isResetting}
                   variant="outline"
-                  className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent"
+                  className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent hover:scale-105 transition-all duration-300"
                 >
                   {isResetting ? (
                     <>
@@ -535,15 +553,15 @@ export function Dashboard() {
         </Card>
 
         {/* Progress Overview */}
-        <Card className="border-2 border-primary/10 shadow-lg">
+        <Card className="border-2 border-primary/10 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-300 hover:shadow-xl hover:scale-[1.01] transition-all">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center space-x-2">
-                <BarChart3 className="h-5 w-5 text-primary" />
+                <BarChart3 className="h-5 w-5 text-primary animate-pulse" />
                 <span>Analysis Progress</span>
               </CardTitle>
               <div className="flex items-center space-x-3">
-                <Badge variant={canAnalyze ? "default" : "secondary"} className="px-3 py-1">
+                <Badge variant={canAnalyze ? "default" : "secondary"} className="px-3 py-1 animate-pulse">
                   {completedSteps}/{totalSteps} Complete
                 </Badge>
                 {(propertyDetails || t12Data || rentRollData || assumptions.askingPrice > 0) && (
@@ -552,7 +570,7 @@ export function Dashboard() {
                     disabled={isResetting}
                     variant="ghost"
                     size="sm"
-                    className="text-muted-foreground hover:text-destructive"
+                    className="text-muted-foreground hover:text-destructive hover:scale-110 transition-all duration-300"
                   >
                     {isResetting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
                   </Button>
@@ -566,18 +584,28 @@ export function Dashboard() {
                 <span className="text-muted-foreground">Overall Progress</span>
                 <span className="font-medium">{Math.round(progressPercentage)}%</span>
               </div>
-              <Progress value={progressPercentage} className="h-3" />
+              <Progress value={progressPercentage} className="h-3 transition-all duration-1000 ease-out" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {analysisSteps.map((step, index) => (
-                <div key={step.id} className="flex items-center space-x-3 p-3 rounded-lg border bg-card/50">
-                  <div className={`flex-shrink-0 ${step.completed ? "text-green-500" : "text-muted-foreground"}`}>
-                    {step.completed ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
+                <div
+                  key={step.id}
+                  className="flex items-center space-x-3 p-3 rounded-lg border bg-card/50 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out hover:shadow-md hover:scale-105 hover:-translate-y-1 transition-all cursor-pointer group"
+                  style={{ animationDelay: `${index * 50 + 400}ms` }}
+                >
+                  <div
+                    className={`flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${step.completed ? "text-green-500" : "text-muted-foreground"}`}
+                  >
+                    {step.completed ? (
+                      <CheckCircle2 className="h-5 w-5 animate-pulse" />
+                    ) : (
+                      <Circle className="h-5 w-5" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`text-sm font-medium ${step.completed ? "text-foreground" : "text-muted-foreground"}`}
+                      className={`text-sm font-medium transition-colors duration-300 ${step.completed ? "text-foreground" : "text-muted-foreground"}`}
                     >
                       {step.title}
                     </p>
@@ -593,13 +621,13 @@ export function Dashboard() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column */}
           <div className="space-y-6">
-            <Card className="transition-all duration-200 hover:shadow-md">
+            <Card className="transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1 animate-in fade-in slide-in-from-left-4 duration-700 ease-out delay-500 group">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-2">
-                  <MapPin className="h-5 w-5" />
+                  <MapPin className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
                   <span>Property Search</span>
                   {propertyDetails && (
-                    <Badge variant="outline" className="ml-auto">
+                    <Badge variant="outline" className="ml-auto animate-pulse">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       Complete
                     </Badge>
@@ -611,20 +639,20 @@ export function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="transition-all duration-200 hover:shadow-md">
+            <Card className="transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1 animate-in fade-in slide-in-from-left-4 duration-700 ease-out delay-600 group">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5" />
+                  <FileText className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
                   <span>Financial Documents</span>
                   <div className="ml-auto flex space-x-2">
                     {t12Data && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs animate-pulse">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         T12
                       </Badge>
                     )}
                     {rentRollData && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs animate-pulse">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         Rent Roll
                       </Badge>
@@ -645,13 +673,13 @@ export function Dashboard() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <Card className="transition-all duration-200 hover:shadow-md">
+            <Card className="transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1 animate-in fade-in slide-in-from-right-4 duration-700 ease-out delay-700 group">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-2">
-                  <Settings className="h-5 w-5" />
+                  <Settings className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
                   <span>Investment Criteria</span>
                   {assumptions.askingPrice > 0 && (
-                    <Badge variant="outline" className="ml-auto">
+                    <Badge variant="outline" className="ml-auto animate-pulse">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       Set
                     </Badge>
@@ -681,9 +709,9 @@ export function Dashboard() {
                 />
 
                 {!canAnalyze && (
-                  <div className="mt-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                  <div className="mt-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out hover:shadow-md transition-all">
                     <div className="flex items-start space-x-3">
-                      <div className="bg-amber-100 dark:bg-amber-900/30 rounded-full p-1">
+                      <div className="bg-amber-100 dark:bg-amber-900/30 rounded-full p-1 animate-bounce">
                         <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div className="flex-1">
@@ -702,7 +730,7 @@ export function Dashboard() {
                             onClick={handleLoadDemoData}
                             variant="outline"
                             size="sm"
-                            className="text-amber-700 border-amber-300 hover:bg-amber-100 dark:text-amber-300 dark:border-amber-700 dark:hover:bg-amber-900/20 bg-transparent"
+                            className="text-amber-700 border-amber-300 hover:bg-amber-100 dark:text-amber-300 dark:border-amber-700 dark:hover:bg-amber-900/20 bg-transparent hover:scale-105 transition-all duration-300"
                           >
                             🎯 Use Sample Data
                           </Button>
@@ -720,7 +748,7 @@ export function Dashboard() {
         </div>
 
         {/* Saved Deals Section */}
-        <Card className="shadow-lg">
+        <Card className="shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-800 hover:shadow-xl hover:scale-[1.01] transition-all">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center space-x-2">
@@ -744,14 +772,14 @@ export function Dashboard() {
                 </div>
               </div>
             ) : dealsError ? (
-              <div className="text-center py-12">
-                <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+              <div className="text-center py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+                <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4 animate-bounce" />
                 <p className="text-destructive font-medium">{dealsError}</p>
                 <p className="text-muted-foreground text-sm mt-2">Please try refreshing the page</p>
               </div>
             ) : savedDeals.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+              <div className="text-center py-12 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
+                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 animate-pulse">
                   <BarChart3 className="h-10 w-10 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-2">Ready to Analyze Your First Deal?</h3>
@@ -762,7 +790,7 @@ export function Dashboard() {
                   <Button
                     onClick={handleLoadDemoData}
                     variant="outline"
-                    className="flex items-center space-x-2 bg-transparent"
+                    className="flex items-center space-x-2 bg-transparent hover:scale-105 transition-all duration-300"
                   >
                     <span>🎯</span>
                     <span>Try with Sample Data</span>
@@ -772,14 +800,15 @@ export function Dashboard() {
               </div>
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {savedDeals.map((savedDeal) => {
+                {savedDeals.map((savedDeal, index) => {
                   const metrics = savedDeal.metrics || {}
                   const decision = savedDeal.decision || "N/A"
 
                   return (
                     <Card
                       key={savedDeal._id}
-                      className="hover:shadow-lg transition-all duration-200 border-2 hover:border-primary/20"
+                      className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out hover:scale-105 hover:-translate-y-2 group cursor-pointer"
+                      style={{ animationDelay: `${index * 50 + 900}ms` }}
                     >
                       <CardContent className="p-5">
                         <div className="flex justify-between items-start mb-4">
@@ -791,7 +820,7 @@ export function Dashboard() {
                                   ? "destructive"
                                   : "secondary"
                             }
-                            className="px-3 py-1 font-medium"
+                            className="px-3 py-1 font-medium group-hover:scale-110 transition-transform duration-300"
                           >
                             {decision}
                           </Badge>
@@ -804,7 +833,7 @@ export function Dashboard() {
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => handleViewDeal(savedDeal)}
-                                className={`h-8 w-8 p-0 ${
+                                className={`h-8 w-8 p-0 transition-all duration-300 hover:scale-125 ${
                                   viewedDeals.has(savedDeal._id)
                                     ? "bg-primary/10 text-primary hover:bg-primary/20"
                                     : "hover:bg-primary/10"
@@ -820,7 +849,7 @@ export function Dashboard() {
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => handleDeleteDeal(savedDeal._id)}
-                                className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 hover:scale-125 transition-all duration-300"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -832,25 +861,27 @@ export function Dashboard() {
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             <div className="space-y-1">
                               <span className="text-muted-foreground text-xs">CoC Return</span>
-                              <p className="font-semibold text-green-600">
+                              <p className="font-semibold text-green-600 group-hover:scale-110 transition-transform duration-300">
                                 {(metrics.cocReturn * 100)?.toFixed(1) || "N/A"}%
                               </p>
                             </div>
                             <div className="space-y-1">
                               <span className="text-muted-foreground text-xs">Cap Rate</span>
-                              <p className="font-semibold text-blue-600">
+                              <p className="font-semibold text-blue-600 group-hover:scale-110 transition-transform duration-300">
                                 {(metrics.capRate * 100)?.toFixed(1) || "N/A"}%
                               </p>
                             </div>
                             <div className="space-y-1">
                               <span className="text-muted-foreground text-xs">IRR</span>
-                              <p className="font-semibold text-purple-600">
+                              <p className="font-semibold text-purple-600 group-hover:scale-110 transition-transform duration-300">
                                 {(metrics.irr * 100)?.toFixed(1) || "N/A"}%
                               </p>
                             </div>
                             <div className="space-y-1">
                               <span className="text-muted-foreground text-xs">Price/Unit</span>
-                              <p className="font-semibold">${metrics.pricePerUnit?.toLocaleString() || "N/A"}</p>
+                              <p className="font-semibold group-hover:scale-110 transition-transform duration-300">
+                                ${metrics.pricePerUnit?.toLocaleString() || "N/A"}
+                              </p>
                             </div>
                           </div>
 
@@ -877,14 +908,17 @@ export function Dashboard() {
 
         {/* Analysis Results */}
         {analysisResults && (
-          <div id="analysis-results" className="scroll-mt-6">
-            <Card className="border-2 border-primary/20 shadow-xl">
+          <div
+            id="analysis-results"
+            className="scroll-mt-6 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-900"
+          >
+            <Card className="border-2 border-primary/20 shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-300">
               <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
                 <CardTitle className="flex items-center space-x-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
+                  <BarChart3 className="h-5 w-5 text-primary animate-pulse" />
                   <span>Analysis Results</span>
                   {isFromSavedDeal && (
-                    <Badge variant="outline" className="ml-auto">
+                    <Badge variant="outline" className="ml-auto animate-pulse">
                       <Clock className="h-3 w-3 mr-1" />
                       Saved Deal
                     </Badge>
