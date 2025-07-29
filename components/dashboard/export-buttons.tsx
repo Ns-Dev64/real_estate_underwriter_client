@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 
+const address=localStorage.getItem("address");
 interface ExportButtonsProps {
   dealData: any;
   propertyDetails: any;
@@ -57,12 +58,12 @@ export function ExportButtons({
     // Property Details Sheet
     const propertyData = [
       ['PROPERTY DETAILS', '', '', ''],
-      ['Address:', propertyDetails?.address || 'N/A', '', ''],
-      ['Year Built:', propertyDetails?.yearBuilt || 'N/A', '', ''],
-      ['Total Units:', propertyDetails?.units || 'N/A', '', ''],
-      ['Crime Rating:', propertyDetails?.crimeRating || 'N/A', '', ''],
-      ['Median Income:', `$${(propertyDetails?.medianIncome || 0).toLocaleString()}`, '', ''],
-      ['Estimated Value:', `$${(propertyDetails?.propertyValue || 0).toLocaleString()}`, '', ''],
+      ['Address:', propertyDetails?.address || address || 'N/A', '', ''],
+      ['Year Built:', propertyDetails?.yearBuilt || propertyDetails.propertyYear || 'N/A', '', ''],
+      ['Total Units:', propertyDetails?.units || propertyDetails.propertyUnit || 'N/A', '', ''],
+      ['Crime Rating:', propertyDetails?.crimeRating || propertyDetails.propertyCrimeRating || 'N/A', '', ''],
+      ['Median Income:', `$${(propertyDetails?.medianIncome || propertyDetails.propertyMedianIncome || 0).toLocaleString()}`, '', ''],
+      ['Estimated Value:', `$${(propertyDetails?.propertyValue || propertyDetails.propertyEstimatedValue || 0).toLocaleString()}`, '', ''],
     ];
     
     const propertySheet = XLSX.utils.aoa_to_sheet(propertyData);
@@ -127,11 +128,11 @@ export function ExportButtons({
       ['', '', '', ''],
       ['RISK FACTORS', '', '', ''],
       ...(dealData.risks || []).map((risk: any,) => [
-        `${risk.risk}`, risk.commentary, '', ''
+        `${risk.risk ? risk.risk : risk}`, risk.risk ? risk.commentary :'', '', ''
       ]),
       ['Advices','','',''],
       ...(dealData.advice || []).map((advice:any)=>[
-        `${advice.recommendation ? advice.recommendation : advice.details}`,advice.details ? advice.details : ''
+        `${advice.recommendation ? advice.recommendation : advice.details ? advice : ''}`,advice.details ? advice.details : ''
       ])
     ];
     
@@ -227,13 +228,13 @@ export function ExportButtons({
   
   const propertyData = [
     ['Attribute', 'Value'],
-    ['Property Address',propertyDetails.address || 'N/A'],
+    ['Property Address',propertyDetails.address || address || 'N/A'],
     ['Property Type', propertyDetails?.propertyType || 'N/A'],
-    ['Year Built', propertyDetails?.yearBuilt || 'N/A'],
-    ['Total Units', propertyDetails?.units || 'N/A'],
-    ['Crime Rating', propertyDetails?.crimeRating || 'N/A'],
-    ['Median Income', `$${(propertyDetails?.medianIncome || 0).toLocaleString()}`],
-    ['Estimated Value', `$${(propertyDetails?.propertyValue || 0).toLocaleString()}`],
+    ['Year Built', propertyDetails?.yearBuilt || propertyDetails.propertyYear || 'N/A'],
+    ['Total Units', propertyDetails?.units || propertyDetails.propertyUnit || 'N/A'],
+    ['Crime Rating', propertyDetails?.crimeRating || propertyDetails.propertyCrimeRating || 'N/A'],
+    ['Median Income', `$${(propertyDetails?.medianIncome || propertyDetails.propertyMedianIncome || 0).toLocaleString()}`],
+    ['Estimated Value', `$${(propertyDetails?.propertyValue || propertyDetails.propertyEstimatedValue || 0).toLocaleString()}`],
   ];
   
   autoTable(doc, {
@@ -288,7 +289,7 @@ export function ExportButtons({
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(200, 0, 0); // Red for risk factors
     dealData.risks.forEach((risk: any, index: number) => {
-      const lines = doc.splitTextToSize(`${index+1}. ${risk.risk} : ${risk.commentary}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`${index+1}. ${risk.risk ? risk.risk + " :" : risk } ${risk.risk ? risk.commentary : ''}`, pageWidth - 2 * margin);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 6 + 5;
       
@@ -298,6 +299,23 @@ export function ExportButtons({
       }
     });
   }
+
+   doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0); 
+   doc.text('Advices', margin, yPosition);
+   yPosition += 15;  
+    doc.setFont('helvetica', 'normal');
+
+  dealData.advice.forEach((advice: any, index: number) => {
+      const lines = doc.splitTextToSize(`${index+1}. ${advice.recommendation ? advice.recommendation + " :"  : advice }  ${advice.recommendation ? advice.details :""}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 6 + 5;
+      
+      if (yPosition > 250) {
+        doc.addPage();
+        yPosition = 30;
+      }
+    });
   
   // Reset text color to black for footer
   doc.setTextColor(0, 0, 0);

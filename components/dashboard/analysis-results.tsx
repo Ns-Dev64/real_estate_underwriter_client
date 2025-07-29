@@ -318,10 +318,10 @@ export function AnalysisResults({
             <TabsContent value="risks" className="space-y-3">
               {risks.length > 0 ? (
                 <div className="space-y-3">
-                  {risks.map((risk: Record<string,string>, index: number) => (
+                  {risks.map((risk: any, index: number) => (
                     <div key={index} className="flex items-start space-x-3 p-3 bg-destructive/10 rounded-md border border-destructive/20">
                       <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                      <p className="text-sm leading-relaxed">{risk.risk} : {risk.commentary}</p>
+                      <p className="text-sm leading-relaxed">{risk.risk ? risk.risk+ " :" : risk} {risk.risk ? risk.commentary : ''}</p>
                     </div>
                   ))}
                 </div>
