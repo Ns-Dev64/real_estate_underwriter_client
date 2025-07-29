@@ -54,7 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: '', // We don't have email in old format
           userName: cleanedUserName
         };
-        console.log('Converted old format user:', userPayload.userName);
         // Update localStorage with new format
         localStorage.setItem('user', JSON.stringify(userPayload));
         setUser(userPayload);
@@ -113,7 +112,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Enhanced setUser function that also persists to localStorage
   const setUserWithPersistence = (newUser: User | null) => {
-    console.log('setUserWithPersistence called with:', newUser);
     setUser(newUser);
     if (newUser) {
       localStorage.setItem('user', JSON.stringify(newUser));

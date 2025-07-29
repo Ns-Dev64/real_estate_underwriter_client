@@ -31,9 +31,7 @@ export default function OAuthCallback() {
         const cleanedUserName = decodedUser.replace(/[)}\s]+$/, '').trim();
         const cleanedEmail = decodedEmail.replace(/[)}\s]+$/, '').trim();
         
-        console.log('Raw values from URL:', { user, email });
-        console.log('Decoded values:', { decodedUser, decodedEmail });
-        console.log('Cleaned values:', { cleanedUserName, cleanedEmail });
+
 
         // Create user payload
         let userPayload = {
@@ -42,7 +40,6 @@ export default function OAuthCallback() {
           userName: cleanedUserName
         }
         
-        console.log('OAuth success - storing user:', userPayload);
 
         // Store token & user data as JSON in localStorage
         localStorage.setItem('token', token);

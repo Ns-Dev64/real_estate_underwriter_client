@@ -11,7 +11,8 @@ export const config = {
 
 function getUrl() :string{
 
-  const envType=process.env.ENV_TYPE || "dev";
+  const envType=process.env.NEXT_PUBLIC_ENV_TYPE || "dev";
+
 
   if(envType==="dev") return process.env.NEXT_PUBLIC_BACKEND_URL_DEV!;
   else if(envType==="dep") return process.env.NEXT_PUBLIC_BACKEND_URL_DEP!;

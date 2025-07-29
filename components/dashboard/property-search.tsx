@@ -11,9 +11,10 @@ import {config} from "@/lib/config"
 interface PropertySearchProps {
   onPropertyDetails: (details: PropertyDetails) => void;
   propertyDetails: PropertyDetails | null;
+  disabled?:boolean 
 }
 
-export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertySearchProps) {
+export function PropertySearch({ onPropertyDetails, propertyDetails,disabled }: PropertySearchProps) {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -71,7 +72,7 @@ export function PropertySearch({ onPropertyDetails, propertyDetails }: PropertyS
               onChange={(e) => setAddress(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
-            <Button onClick={handleSearch} disabled={loading || !address.trim()}>
+            <Button onClick={handleSearch} disabled={loading || !address.trim() || disabled } >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (

@@ -11,9 +11,10 @@ interface FileUploadsProps {
   onRentRollUpload: (data: RentRollData) => void;
   t12Data: T12Data | null;
   rentRollData: RentRollData | null;
+  disabled?:boolean
 }
 
-export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollData }: FileUploadsProps) {
+export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollData,disabled }: FileUploadsProps) {
   const [t12Loading, setT12Loading] = useState(false);
   const [rentRollLoading, setRentRollLoading] = useState(false);
   const [errors, setErrors] = useState<{ t12?: string; rentRoll?: string }>({});
@@ -206,7 +207,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
               type="file"
               accept=".pdf,.xlsx,.xls"
               onChange={handleT12Upload}
-              disabled={t12Loading}
+              disabled={t12Loading || disabled}
               className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
             />
             {t12Loading && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -215,6 +216,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
                 size="sm"
                 variant="outline"
                 onClick={removeT12File}
+                disabled={disabled}
                 className="flex items-center space-x-1 text-destructive hover:text-destructive"
               >
                 <X className="h-3 w-3" />
@@ -268,7 +270,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
               type="file"
               accept=".csv,.xlsx,.xls"
               onChange={handleRentRollUpload}
-              disabled={rentRollLoading}
+              disabled={rentRollLoading || disabled}
               className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
             />
             {rentRollLoading && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -277,6 +279,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
                 size="sm"
                 variant="outline"
                 onClick={removeRentRollFile}
+                disabled={disabled}
                 className="flex items-center space-x-1 text-destructive hover:text-destructive"
               >
                 <X className="h-3 w-3" />

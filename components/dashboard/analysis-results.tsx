@@ -29,9 +29,11 @@ interface AnalysisResultsProps {
   buyBox: any;
   assumptions: any;
   isFromSavedDeal?: boolean;
+  handleReset():Promise<void>
 }
 
 export function AnalysisResults({ 
+  handleReset,
   results, 
   propertyDetails, 
   t12Data, 
@@ -46,9 +48,22 @@ export function AnalysisResults({
   // Check if deal is already saved
   const isDealSaved = results?._id || isFromSavedDeal;
 
+
   const handleSaveDeal = async () => {
     setSaving(true);
     try {
+
+      let userDealPayload={
+        dealData:results,
+        userData:{
+          propertyDetails,
+          t12Data,
+          rentRollData,
+          buyBox,
+          assumptions
+        }
+      }
+
       const token = localStorage.getItem('token');
       const response = await fetch(`${config.BACKEND_URL}/deals`, {
         method: 'POST',
@@ -56,7 +71,7 @@ export function AnalysisResults({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({deal:results}),
+        body: JSON.stringify({deal:userDealPayload}),
       });
 
       if (response.ok) {
@@ -67,6 +82,8 @@ export function AnalysisResults({
         }
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
+        await handleReset();
+        window.location.reload();
       }
     } catch (error) {
       console.error('Failed to save deal:', error);
@@ -77,8 +94,8 @@ export function AnalysisResults({
 
   const getDecisionColor = (decision: string) => {
     switch (decision?.toUpperCase()) {
-      case 'BUY': return 'bg-green-500';
-      case 'PASS': return 'bg-red-500';
+      case 'PASS': return 'bg-green-500';
+      case 'PASS WITH CONDITIONS': return 'bg-green-200';
       case 'FAIL': return 'bg-red-600';
       default: return 'bg-yellow-500';
     }
@@ -86,8 +103,7 @@ export function AnalysisResults({
 
   const getDecisionVariant = (decision: string) => {
     switch (decision?.toUpperCase()) {
-      case 'BUY': return 'default';
-      case 'PASS': return 'destructive';
+      case 'PASS': return 'outline';
       case 'FAIL': return 'destructive';
       default: return 'secondary';
     }
@@ -287,10 +303,10 @@ export function AnalysisResults({
             <TabsContent value="advice" className="space-y-3">
               {advice.length > 0 ? (
                 <div className="space-y-3">
-                  {advice.map((adviceItem: string, index: number) => (
+                  {advice.map((adviceItem: any, index: number) => (
                     <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-800">
                       <Lightbulb className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm leading-relaxed text-blue-900 dark:text-blue-100">{adviceItem}</p>
+                      <p className="text-sm leading-relaxed text-blue-900 dark:text-blue-100">{adviceItem.recommendation ? adviceItem.recommendation + " :" : ""}  {adviceItem.details ? adviceItem.details : adviceItem}</p>
                     </div>
                   ))}
                 </div>
@@ -302,10 +318,10 @@ export function AnalysisResults({
             <TabsContent value="risks" className="space-y-3">
               {risks.length > 0 ? (
                 <div className="space-y-3">
-                  {risks.map((risk: string, index: number) => (
+                  {risks.map((risk: Record<string,string>, index: number) => (
                     <div key={index} className="flex items-start space-x-3 p-3 bg-destructive/10 rounded-md border border-destructive/20">
                       <AlertTriangle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
-                      <p className="text-sm leading-relaxed">{risk}</p>
+                      <p className="text-sm leading-relaxed">{risk.risk} : {risk.commentary}</p>
                     </div>
                   ))}
                 </div>

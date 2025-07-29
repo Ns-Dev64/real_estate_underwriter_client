@@ -26,13 +26,14 @@ export function ExportButtons({
   assumptions 
 }: ExportButtonsProps) {
   
+
+
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
-    const address=localStorage.getItem("address")
     // Summary Sheet
     const summaryData = [
       ['REAL ESTATE UNDERWRITING MODEL', '', '', ''],
-      ['Property Address:', address || 'N/A', '', ''],
+      ['Property Address:', propertyDetails.address?.toString() || 'N/A', '', ''],
       ['Analysis Date:', new Date().toLocaleDateString(), '', ''],
       ['', '', '', ''],
       ['INVESTMENT DECISION', '', '', ''],
@@ -56,16 +57,12 @@ export function ExportButtons({
     // Property Details Sheet
     const propertyData = [
       ['PROPERTY DETAILS', '', '', ''],
-      ['Address:', address || 'N/A', '', ''],
-      ['Property Type:', propertyDetails?.propertyType || 'N/A', '', ''],
-      ['Year Built:', propertyDetails?.propertyYear || 'N/A', '', ''],
-      ['Total Units:', propertyDetails?.propertyUnit || 'N/A', '', ''],
-      ['Crime Rating:', propertyDetails?.propertyCrimeRating || 'N/A', '', ''],
-      ['Median Income:', `$${(propertyDetails?.propertyMedianIncome || 0).toLocaleString()}`, '', ''],
-      ['Average Income:', `$${(propertyDetails?.propertyAvgIncome || 0).toLocaleString()}`, '', ''],
-      ['Estimated Value:', `$${(propertyDetails?.propertyEstimatedValue || 0).toLocaleString()}`, '', ''],
-      ['Min Value:', `$${(propertyDetails?.propertyMinValue || 0).toLocaleString()}`, '', ''],
-      ['Max Value:', `$${(propertyDetails?.propertyMaxValue || 0).toLocaleString()}`, '', ''],
+      ['Address:', propertyDetails?.address || 'N/A', '', ''],
+      ['Year Built:', propertyDetails?.yearBuilt || 'N/A', '', ''],
+      ['Total Units:', propertyDetails?.units || 'N/A', '', ''],
+      ['Crime Rating:', propertyDetails?.crimeRating || 'N/A', '', ''],
+      ['Median Income:', `$${(propertyDetails?.medianIncome || 0).toLocaleString()}`, '', ''],
+      ['Estimated Value:', `$${(propertyDetails?.propertyValue || 0).toLocaleString()}`, '', ''],
     ];
     
     const propertySheet = XLSX.utils.aoa_to_sheet(propertyData);
@@ -129,16 +126,20 @@ export function ExportButtons({
       ]),
       ['', '', '', ''],
       ['RISK FACTORS', '', '', ''],
-      ...(dealData.risks || []).map((risk: string, index: number) => [
-        `Risk ${index + 1}:`, risk, '', ''
+      ...(dealData.risks || []).map((risk: any,) => [
+        `${risk.risk}`, risk.commentary, '', ''
       ]),
+      ['Advices','','',''],
+      ...(dealData.advice || []).map((advice:any)=>[
+        `${advice.recommendation ? advice.recommendation : advice.details}`,advice.details ? advice.details : ''
+      ])
     ];
     
     const analysisSheet = XLSX.utils.aoa_to_sheet(analysisData);
     XLSX.utils.book_append_sheet(workbook, analysisSheet, 'Analysis');
     
     // Export the file
-    const fileName = `Real_Estate_Analysis_${address?.replace(/[^a-zA-Z0-9]/g, '_') || 'Property'}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const fileName = `Real_Estate_Analysis_${propertyDetails?.address?.replace(/[^a-zA-Z0-9]/g, '_') || 'Property'}_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(workbook, fileName);
   };
   
@@ -146,7 +147,6 @@ export function ExportButtons({
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
   const margin = 20;
-  const address=localStorage.getItem("address");
 
   // Title
   doc.setFontSize(20);
@@ -156,7 +156,7 @@ export function ExportButtons({
   // Property Address
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Property: ${address || 'N/A'}`, pageWidth / 2, 45, { align: 'center' });
+  doc.text(`Property: ${propertyDetails.address || 'N/A'}`, pageWidth / 2, 45, { align: 'center' });
   doc.text(`Analysis Date: ${new Date().toLocaleDateString()}`, pageWidth / 2, 55, { align: 'center' });
   
   let yPosition = 75;
@@ -171,8 +171,7 @@ export function ExportButtons({
   doc.setFont('helvetica', 'normal');
   
   // Decision box
-  const decisionColor = dealData.decision === 'BUY' ? [0, 128, 0] : 
-                       dealData.decision === 'PASS' ? [255, 0, 0] : [255, 165, 0];
+  const decisionColor = dealData.decision === 'PASS' ? [0, 128, 0]  : dealData.decision ==="Fail" ? [255, 0, 0] : [255, 165, 0];
   doc.setFillColor(decisionColor[0], decisionColor[1], decisionColor[2]);
   doc.rect(margin, yPosition - 5, 60, 15, 'F');
   doc.setTextColor(255, 255, 255);
@@ -228,13 +227,14 @@ export function ExportButtons({
   
   const propertyData = [
     ['Attribute', 'Value'],
-    ['Property Address',address || 'N/A'],
+    ['Property Address',propertyDetails.address || 'N/A'],
     ['Property Type', propertyDetails?.propertyType || 'N/A'],
-    ['Year Built', propertyDetails?.propertyYear || 'N/A'],
-    ['Total Units', propertyDetails?.propertyUnit || 'N/A'],
-    ['Crime Rating', propertyDetails?.propertyCrimeRating || 'N/A'],
-    ['Median Income', `$${(propertyDetails?.propertyMedianIncome || 0).toLocaleString()}`],
-    ['Estimated Value', `$${(propertyDetails?.propertyEstimatedValue || 0).toLocaleString()}`],
+    ['Year Built', propertyDetails?.yearBuilt || 'N/A'],
+    ['Total Units', propertyDetails?.units || 'N/A'],
+    ['Crime Rating', propertyDetails?.crimeRating || 'N/A'],
+    ['School Rating',propertyDetails?.schoolRatings[Math.floor(propertyDetails?.schoolRatings.length/2)] || 'NA'],
+    ['Median Income', `$${(propertyDetails?.medianIncome || 0).toLocaleString()}`],
+    ['Estimated Value', `$${(propertyDetails?.propertyValue || 0).toLocaleString()}`],
   ];
   
   autoTable(doc, {
@@ -288,8 +288,8 @@ export function ExportButtons({
     
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(200, 0, 0); // Red for risk factors
-    dealData.risks.forEach((risk: string, index: number) => {
-      const lines = doc.splitTextToSize(`⚠ ${risk}`, pageWidth - 2 * margin);
+    dealData.risks.forEach((risk: any, index: number) => {
+      const lines = doc.splitTextToSize(`${index+1}. ${risk.risk} : ${risk.commentary}`, pageWidth - 2 * margin);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 6 + 5;
       

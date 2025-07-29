@@ -65,6 +65,7 @@ interface InvestmentCriteriaProps {
   canAnalyze: boolean
   onAnalysisStart?: () => void
   onDealSaved?: () => void
+  disabled?:boolean
 }
 
 export function InvestmentCriteria({
@@ -76,6 +77,7 @@ export function InvestmentCriteria({
   onAnalysisComplete,
   canAnalyze,
   onAnalysisStart,
+  disabled,
   onDealSaved,
 }: InvestmentCriteriaProps) {
   const [loading, setLoading] = useState(false)
@@ -131,7 +133,6 @@ export function InvestmentCriteria({
         propertyData: analysisData.propertyDetails,
       }
 
-      console.log(payload)
       const token = localStorage.getItem("token")
       const response = await fetch(`${config.BACKEND_URL}/deal`, {
         method: "POST",
@@ -146,7 +147,7 @@ export function InvestmentCriteria({
         let errorMessage = "Analysis failed"
         try {
           const errorData = await response.json()
-          errorMessage = errorData.message || errorData.error || `Analysis failed with status ${response.status}`
+          errorMessage = errorData.message || errorData.error || errorData.data.message || errorData.data || `Analysis failed with status ${response.status}`
         } catch {
           try {
             const errorText = await response.text()
@@ -158,7 +159,7 @@ export function InvestmentCriteria({
         throw new Error(errorMessage)
       }
 
-      const results = await response.json()
+      const results = await response.json();
       onAnalysisComplete(results.data || results)
 
       // Refresh saved deals after successful analysis
@@ -191,12 +192,13 @@ export function InvestmentCriteria({
             <TabsTrigger value="assumptions">Assumptions</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="buybox" className="space-y-4">
+          <TabsContent value="buybox" className="space-y-4" >
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="minYearBuilt">Min Year Built</Label>
                 <Input
                   id="minYearBuilt"
+                  disabled={disabled}
                   type="number"
                   value={buyBox.minYearBuilt}
                   onChange={(e) => onBuyBoxChange({ ...buyBox, minYearBuilt: Number(e.target.value) })}
@@ -207,6 +209,7 @@ export function InvestmentCriteria({
                 <Label htmlFor="minUnits">Min Units</Label>
                 <Input
                   id="minUnits"
+                  disabled={disabled}
                   type="number"
                   value={buyBox.minUnits}
                   onChange={(e) => onBuyBoxChange({ ...buyBox, minUnits: Number(e.target.value) })}
@@ -217,6 +220,7 @@ export function InvestmentCriteria({
                 <Label htmlFor="minCoCReturn">Min CoC Return (%)</Label>
                 <Input
                   id="minCoCReturn"
+                  disabled={disabled}
                   type="number"
                   step="0.1"
                   value={buyBox.minCoCReturn}
@@ -228,6 +232,7 @@ export function InvestmentCriteria({
                 <Label htmlFor="minCapRate">Min Cap Rate (%)</Label>
                 <Input
                   id="minCapRate"
+                  disabled={disabled}
                   type="number"
                   step="0.1"
                   value={buyBox.minCapRate}
@@ -240,6 +245,7 @@ export function InvestmentCriteria({
               <Label htmlFor="maxPurchasePrice">Max Purchase Price ($)</Label>
               <Input
                 id="maxPurchasePrice"
+                disabled={disabled}
                 type="number"
                 value={buyBox.maxPurchasePrice}
                 onChange={(e) => onBuyBoxChange({ ...buyBox, maxPurchasePrice: Number(e.target.value) })}
@@ -251,11 +257,12 @@ export function InvestmentCriteria({
               <div className="flex space-x-2">
                 <Input
                   placeholder="Add market"
+                  disabled={disabled}
                   value={newMarket}
                   onChange={(e) => setNewMarket(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && addMarket()}
                 />
-                <Button size="sm" onClick={addMarket}>
+                <Button size="sm" onClick={addMarket} disabled={disabled}>
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
@@ -279,6 +286,7 @@ export function InvestmentCriteria({
                   id="askingPrice"
                   type="number"
                   value={assumptions.askingPrice}
+                  disabled={disabled}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, askingPrice: Number(e.target.value) })}
                 />
               </div>
@@ -290,6 +298,7 @@ export function InvestmentCriteria({
                   type="number"
                   step="0.1"
                   value={assumptions.downPayment}
+                  disabled={disabled}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, downPayment: Number(e.target.value) })}
                 />
               </div>
@@ -300,6 +309,7 @@ export function InvestmentCriteria({
                   id="interestRate"
                   type="number"
                   step="0.1"
+                  disabled={disabled}
                   value={assumptions.interestRate}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, interestRate: Number(e.target.value) })}
                 />
@@ -310,6 +320,7 @@ export function InvestmentCriteria({
                 <Input
                   id="loanTerm"
                   type="number"
+                  disabled={disabled}
                   value={assumptions.loanTerm}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, loanTerm: Number(e.target.value) })}
                 />
@@ -321,6 +332,7 @@ export function InvestmentCriteria({
                   id="exitCapRate"
                   type="number"
                   step="0.1"
+                  disabled={disabled}
                   value={assumptions.exitCapRate}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, exitCapRate: Number(e.target.value) })}
                 />
@@ -331,6 +343,7 @@ export function InvestmentCriteria({
                 <Input
                   id="exitYear"
                   type="number"
+                  disabled={disabled}
                   value={assumptions.exitYear}
                   onChange={(e) => onAssumptionsChange({ ...assumptions, exitYear: Number(e.target.value) })}
                 />
@@ -347,32 +360,7 @@ export function InvestmentCriteria({
           )}
 
           {/* Enhanced Demo Data Section */}
-          <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <div className="flex items-start space-x-3">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="useMockData"
-                  checked={useMockData}
-                  onChange={(e) => setUseMockData(e.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <Sparkles className="h-4 w-4 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <Label
-                  htmlFor="useMockData"
-                  className="text-sm font-medium text-blue-900 dark:text-blue-100 cursor-pointer"
-                >
-                  🎯 Experience Our Platform with Sample Data
-                </Label>
-                <p className="text-xs text-blue-700 dark:text-blue-200 mt-1">
-                  Explore our analysis capabilities using realistic data from a 32-unit Denver multifamily property.
-                  Perfect for understanding our platform's power before uploading your own files.
-                </p>
-              </div>
-            </div>
-          </div>
+          
 
           <Button
             onClick={handleAnalyze}
