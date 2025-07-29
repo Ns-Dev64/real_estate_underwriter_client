@@ -8,7 +8,6 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 
-const address=localStorage.getItem("address");
 interface ExportButtonsProps {
   dealData: any;
   propertyDetails: any;
@@ -30,6 +29,8 @@ export function ExportButtons({
 
 
   const exportToExcel = () => {
+    const address=localStorage.getItem("address");
+
     const workbook = XLSX.utils.book_new();
     // Summary Sheet
     const summaryData = [
@@ -145,6 +146,7 @@ export function ExportButtons({
   };
   
  const exportToPDF = () => {
+  const address=localStorage.getItem("address");
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
   const margin = 20;
