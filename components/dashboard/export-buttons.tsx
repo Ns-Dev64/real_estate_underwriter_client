@@ -232,7 +232,6 @@ export function ExportButtons({
     ['Year Built', propertyDetails?.yearBuilt || 'N/A'],
     ['Total Units', propertyDetails?.units || 'N/A'],
     ['Crime Rating', propertyDetails?.crimeRating || 'N/A'],
-    ['School Rating',propertyDetails?.schoolRatings[Math.floor(propertyDetails?.schoolRatings.length/2)] || 'NA'],
     ['Median Income', `$${(propertyDetails?.medianIncome || 0).toLocaleString()}`],
     ['Estimated Value', `$${(propertyDetails?.propertyValue || 0).toLocaleString()}`],
   ];
