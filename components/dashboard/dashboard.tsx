@@ -872,7 +872,7 @@ className="bg-white border border-black text-black font-medium px-6 py-2 rounded
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-2">
                   <Settings className="h-5 w-5 text-real-estate-primary group-hover:scale-110 transition-transform duration-300" />
-                  <span>Investment Area</span>
+                  <span>Investment Dashboard</span>
                   {assumptions.askingPrice > 0 && (
                     <Badge variant="outline" className="ml-auto border-real-estate-success/30 text-real-estate-success">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
