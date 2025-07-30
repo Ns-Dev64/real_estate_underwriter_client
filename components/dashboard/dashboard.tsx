@@ -314,9 +314,6 @@ export function Dashboard() {
 
   // Reset all data function
   const handleResetAll = async () => {
-    if (!confirm("Are you sure you want to reset all data? This will clear all your inputs and analysis results.")) {
-      return
-    }
 
     setIsResetting(true)
 
@@ -663,24 +660,6 @@ className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:
                   >
                     Try Demo Data
                   </Button>
-                  <Button
-                    onClick={handleResetAll}
-                    disabled={isResetting}
-                    variant="outline"
-                    className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent hover:scale-105 transition-all duration-300"
-                  >
-                    {isResetting ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Resetting...
-                      </>
-                    ) : (
-                      <>
-                        <RotateCcw className="h-4 w-4 mr-2" />
-                        Reset All
-                      </>
-                    )}
-                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -742,6 +721,24 @@ className="bg-white border border-black text-black font-medium px-6 py-2 rounded
                 >
                   {completedSteps}/{totalSteps} Complete
                 </Badge>
+                 <Button
+                    onClick={handleResetAll}
+                    disabled={isResetting}
+                    variant="outline"
+                    className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent hover:scale-105 transition-all duration-300"
+                  >
+                    {isResetting ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        Resetting...
+                      </>
+                    ) : (
+                      <>
+                        <RotateCcw className="h-4 w-4 mr-2" />
+                        Clear Progress
+                      </>
+                    )}
+                  </Button>
                 {!isFromSavedDeal && (propertyDetails || t12Data || rentRollData || assumptions.askingPrice > 0) && (
                   <Button
                     onClick={handleResetAll}
