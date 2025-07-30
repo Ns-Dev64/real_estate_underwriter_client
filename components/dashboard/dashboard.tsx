@@ -699,7 +699,7 @@ className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:
                   <div>
                     <h3 className="text-lg font-semibold text-real-estate-primary">Viewing Saved Deal</h3>
                     <p className="text-real-estate-primary/80 text-sm">
-                      You're currently viewing a previously analyzed deal. Form fields are populated with saved data.
+                      You're currently viewing a previously analyzed deal.
                     </p>
                   </div>
                 </div>

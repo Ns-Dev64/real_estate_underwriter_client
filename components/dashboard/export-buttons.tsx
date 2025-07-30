@@ -20,8 +20,6 @@ interface ExportButtonsProps {
 export function ExportButtons({ 
   dealData, 
   propertyDetails, 
-  t12Data, 
-  rentRollData, 
   buyBox, 
   assumptions 
 }: ExportButtonsProps) {
@@ -69,6 +67,7 @@ export function ExportButtons({
     
     const propertySheet = XLSX.utils.aoa_to_sheet(propertyData);
     XLSX.utils.book_append_sheet(workbook, propertySheet, 'Property Details');
+  
     
     // Financial Analysis Sheet
     const financialData = [
@@ -82,17 +81,6 @@ export function ExportButtons({
       ['Exit Cap Rate:', `${assumptions?.exitCapRate || 0}%`, '', ''],
       ['Exit Year:', assumptions?.exitYear || 0, '', ''],
       ['', '', '', ''],
-      ['T12 SUMMARY', '', '', ''],
-      ['Total Income:', `$${(t12Data?.totalIncome || 0).toLocaleString()}`, '', ''],
-      ['Total Expenses:', `$${(t12Data?.totalExpenses || 0).toLocaleString()}`, '', ''],
-      ['Net Operating Income:', `$${(t12Data?.netOperatingIncome || 0).toLocaleString()}`, '', ''],
-      ['', '', '', ''],
-      ['RENT ROLL SUMMARY', '', '', ''],
-      ['Total Units:', rentRollData?.totalUnits || 0, '', ''],
-      ['Occupied Units:', rentRollData?.occupiedUnits || 0, '', ''],
-      ['Occupancy Rate:', `${rentRollData?.occupancyRate || 0}%`, '', ''],
-      ['Total Rent:', `$${(rentRollData?.totalRent || 0).toLocaleString()}`, '', ''],
-      ['Average Rent:', `$${(rentRollData?.averageRent || 0).toLocaleString()}`, '', ''],
     ];
     
     const financialSheet = XLSX.utils.aoa_to_sheet(financialData);
@@ -174,7 +162,7 @@ export function ExportButtons({
   doc.setFont('helvetica', 'normal');
   
   // Decision box
-  const decisionColor = dealData.decision === 'PASS' ? [0, 128, 0]  : dealData.decision ==="Fail" ? [255, 0, 0] : [255, 165, 0];
+  const decisionColor = dealData.decision === 'PASS' ? [0, 128, 0]  : dealData.decision ==="FAIL" ? [255, 0, 0] : [255, 165, 0];
   doc.setFillColor(decisionColor[0], decisionColor[1], decisionColor[2]);
   doc.rect(margin, yPosition - 5, 60, 15, 'F');
   doc.setTextColor(255, 255, 255);
@@ -304,7 +292,7 @@ export function ExportButtons({
 
    doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0); 
-   doc.text('Advices', margin, yPosition);
+   doc.text('ADVICES', margin, yPosition);
    yPosition += 15;  
     doc.setFont('helvetica', 'normal');
 
