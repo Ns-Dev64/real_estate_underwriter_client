@@ -721,35 +721,26 @@ className="bg-white border border-black text-black font-medium px-6 py-2 rounded
                 >
                   {completedSteps}/{totalSteps} Complete
                 </Badge>
-                 <Button
-                    onClick={handleResetAll}
-                    disabled={isResetting}
-                    variant="outline"
-                    className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent hover:scale-105 transition-all duration-300"
-                  >
-                    {isResetting ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                        Resetting...
-                      </>
-                    ) : (
-                      <>
-                        <RotateCcw className="h-4 w-4 mr-2" />
-                        Clear Progress
-                      </>
-                    )}
-                  </Button>
-                {!isFromSavedDeal && (propertyDetails || t12Data || rentRollData || assumptions.askingPrice > 0) && (
-                  <Button
-                    onClick={handleResetAll}
-                    disabled={isResetting}
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground hover:text-destructive hover:scale-110 transition-all duration-300"
-                  >
-                    {isResetting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
-                  </Button>
-                )}
+               {!isFromSavedDeal && (propertyDetails || t12Data || rentRollData || assumptions.askingPrice > 0) && (
+  <Button
+    onClick={handleResetAll}
+    disabled={isResetting}
+    variant="outline"
+    className="border-red-200 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/20 bg-transparent hover:scale-105 transition-all duration-300"
+  >
+    {isResetting ? (
+      <>
+        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+        Resetting...
+      </>
+    ) : (
+      <>
+        <RotateCcw className="h-4 w-4 mr-2" />
+        Clear Progress
+      </>
+    )}
+  </Button>
+)}
               </div>
             </div>
           </CardHeader>
