@@ -637,7 +637,7 @@ export function Dashboard() {
             Real Estate Deal Analyzer
           </h1>
           <p className="text-lg text-muted-foreground mb-6">
-            Analyze your real estate investments with precision and confidence
+            Smart insights for property investments.
           </p>
         </div>
 
@@ -647,10 +647,9 @@ export function Dashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-real-estate-info">🚀 Experience Our Platform</h3>
+                  <h3 className="text-lg font-semibold text-real-estate-info">🚀 Jumpstart Your Investment Journey</h3>
                   <p className="text-real-estate-info/80 text-sm">
-                    Get a taste of our powerful analysis capabilities with sample data from a real multifamily property
-                    deal.
+                    Explore real-world data and see how our platform helps you analyze multifamily deals with confidence.
                   </p>
                 </div>
                 <div className="flex space-x-3">
