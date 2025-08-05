@@ -72,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (!response.ok) {
+
       throw new Error('Login failed');
     }
 
@@ -82,9 +83,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       userName: data.username,
     };
     localStorage.setItem('token', data.token);
+    localStorage.setItem('refresh',data.refreshToken);
     localStorage.setItem('user', JSON.stringify(user));
     setUser(user);
   };
+
+
 
   const register = async (email: string, userName: string, password: string) => {
     const response = await fetch(`${config.BACKEND_URL}/register`, {
@@ -99,12 +103,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('Registration failed');
     }
 
-    const data = await response.json();
     // After registration, automatically log in
     await login(email, password);
   };
 
   const logout = () => {
+    localStorage.removeItem("refresh");
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setUser(null);
@@ -136,3 +140,4 @@ export function useAuth() {
   }
   return context;
 }
+

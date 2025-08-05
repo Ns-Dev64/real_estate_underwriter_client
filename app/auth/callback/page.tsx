@@ -12,7 +12,8 @@ export default function OAuthCallback() {
     const error = urlParams.get('error');
     const email = urlParams.get("email")!;
     const user = urlParams.get('user');
-    
+    const refresh=urlParams.get("refresh");
+
     if (error) {
       if (window.opener) {
         window.opener.postMessage({ type: 'OAUTH_ERROR', error }, window.location.origin);
@@ -21,7 +22,7 @@ export default function OAuthCallback() {
         window.location.href = `?error=${encodeURIComponent(error)}`;
       }
     } 
-    else if (token && user) {
+    else if (token && user && refresh) {
       try {
         // Decode the user parameter in case it's URL encoded
         const decodedUser = decodeURIComponent(user);
@@ -44,6 +45,7 @@ export default function OAuthCallback() {
         // Store token & user data as JSON in localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userPayload));
+        localStorage.setItem('refresh',refresh);
 
         // **Update global context**
         setUser(userPayload);
