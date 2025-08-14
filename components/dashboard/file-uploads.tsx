@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Upload, FileText, Loader2, CheckCircle, X, AlertTriangle } from 'lucide-react';
 import { T12Data, RentRollData } from './dashboard';
 import { config } from '@/lib/config';
+import { useAuth } from '@/hooks/use-auth';
 interface FileUploadsProps {
   onT12Upload: (data: T12Data) => void;
   onRentRollUpload: (data: RentRollData) => void;
@@ -20,6 +21,7 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
   const [errors, setErrors] = useState<{ t12?: string; rentRoll?: string }>({});
   const [t12File, setT12File] = useState<File | null>(null);
   const [rentRollFile, setRentRollFile] = useState<File | null>(null);
+  const { makeAuthenticatedRequest } = useAuth();
 
   // File integrity validation
   const validateFileIntegrity = async (file: File): Promise<boolean> => {
@@ -88,12 +90,8 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
       const formData = new FormData();
       formData.append('file', file);
 
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${config.BACKEND_URL}/t12`, {
+      const response = await makeAuthenticatedRequest(`${config.BACKEND_URL}/t12`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
         body: formData,
       });
 
@@ -136,12 +134,8 @@ export function FileUploads({ onT12Upload, onRentRollUpload, t12Data, rentRollDa
       const formData = new FormData();
       formData.append('file', file);
 
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${config.BACKEND_URL}/rent`, {
+      const response = await makeAuthenticatedRequest(`${config.BACKEND_URL}/rent`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
         body: formData,
       });
 

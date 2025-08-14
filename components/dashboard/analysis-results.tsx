@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { config } from '@/lib/config';
+import { useAuth } from '@/hooks/use-auth';
 import { ExportButtons } from './export-buttons';
 import { 
   TrendingUp, 
@@ -44,6 +45,7 @@ export function AnalysisResults({
 }: AnalysisResultsProps) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const { makeAuthenticatedRequest } = useAuth();
 
   // Check if deal is already saved
   const isDealSaved = results?._id || isFromSavedDeal;
@@ -64,12 +66,10 @@ export function AnalysisResults({
         }
       }
 
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${config.BACKEND_URL}/deals`, {
+      const response = await makeAuthenticatedRequest(`${config.BACKEND_URL}/deals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({deal:userDealPayload}),
       });

@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Calculator, Loader2, Plus, X, Sparkles } from "lucide-react"
 import type { BuyBox, Assumptions } from "./dashboard"
-import {config} from "@/lib/config"
+import { config } from "@/lib/config"
+import { useAuth } from "@/hooks/use-auth"
 
 // Mock data for testing
 const MOCK_PROPERTY_DETAILS = {
@@ -84,6 +85,7 @@ export function InvestmentCriteria({
   const [newMarket, setNewMarket] = useState("")
   const [useMockData, setUseMockData] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { makeAuthenticatedRequest } = useAuth()
 
   const addMarket = () => {
     if (newMarket.trim() && !buyBox.preferredMarkets.includes(newMarket.trim())) {
@@ -133,12 +135,10 @@ export function InvestmentCriteria({
         propertyData: analysisData.propertyDetails,
       }
 
-      const token = localStorage.getItem("token")
-      const response = await fetch(`${config.BACKEND_URL}/deal`, {
+      const response = await makeAuthenticatedRequest(`${config.BACKEND_URL}/deal`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       })

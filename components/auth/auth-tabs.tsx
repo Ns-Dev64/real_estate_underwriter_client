@@ -110,21 +110,20 @@ export function AuthTabs() {
               <div className="space-y-4">
                 <Badge
                   variant="secondary"
-                  className="px-3 py-1 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-100 hover:scale-105 transition-transform"
+                  className="px-4 py-2 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-100 hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border-blue-200 dark:border-blue-800"
                 >
                   <Sparkles className="h-3 w-3 mr-1 animate-pulse" />
-                  World's First AI Real Estate Underwriter
+                  🚀 AI-Powered Real Estate Analysis Platform
                 </Badge>
-                <h1 className="text-4xl lg:text-5xl font-bold text-foreground leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-200">
-                  Underwrite Any{" "}
+                <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-200">
+                  Analyze Any{" "}
                   <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent animate-pulse">
                     Commercial Deal
                   </span>{" "}
-                  in 30 Seconds
+                  in Under 30 Seconds
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-300">
-                  Replace hours of manual analysis with AI-powered underwriting. From T12s to market comps, get instant
-                  investment decisions with institutional-grade accuracy.
+                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-300 max-w-4xl">
+                  Transform hours of manual underwriting into seconds of AI-powered analysis. Upload your T12s, rent rolls, and property data to get institutional-grade investment decisions instantly.
                 </p>
               </div>
 
@@ -166,21 +165,21 @@ export function AuthTabs() {
 
             {/* Features Grid */}
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-600">
-              <h3 className="text-2xl font-semibold text-foreground">How It Works</h3>
+              <h3 className="text-2xl lg:text-3xl font-semibold text-foreground">How It Works</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {features.map((feature, index) => (
                   <Card
                     key={index}
-                    className="p-4 hover:shadow-md transition-all duration-300 hover:scale-105 hover:-translate-y-1 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out group"
+                    className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-2 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out group border-2 border-transparent hover:border-primary/20"
                     style={{ animationDelay: `${index * 100 + 700}ms` }}
                   >
                     <div className="flex items-start space-x-3">
                       <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
-                        <feature.icon className="h-5 w-5 text-primary" />
+                        <feature.icon className="h-6 w-6 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
-                        <p className="text-sm text-muted-foreground">{feature.description}</p>
+                        <h4 className="font-semibold text-foreground mb-2 text-lg">{feature.title}</h4>
+                        <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
                   </Card>
@@ -191,23 +190,27 @@ export function AuthTabs() {
             {/* Process Flow */}
             <Card className="bg-gradient-to-r from-primary/5 to-blue-50 dark:from-primary/10 dark:to-blue-950/20 animate-in fade-in slide-in-from-right-4 duration-700 ease-out delay-700 hover:shadow-lg hover:scale-[1.02] transition-all">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Simple 4-Step Process</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-6 flex items-center">
+                  <div className="bg-primary/20 rounded-full p-2 mr-3">
+                    <Play className="h-5 w-5 text-primary" />
+                  </div>
+                  Simple 3-Step Process
+                </h3>
                 <div className="space-y-3">
                   {[
-                    "Enter property address",
-                    "Upload T12 & rent roll documents",
-                    "Set your investment criteria",
-                    "Get instant analysis & recommendations",
+                    "🏢 Enter property address & get market data",
+                    "📊 Upload T12 & rent roll documents",
+                    "🎯 Set investment criteria & analyze instantly",
                   ].map((step, index) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-3 animate-in fade-in slide-in-from-left-2 duration-500 ease-out hover:translate-x-2 transition-transform"
+                      className="flex items-center space-x-4 animate-in fade-in slide-in-from-left-2 duration-500 ease-out hover:translate-x-2 transition-transform p-3 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50"
                       style={{ animationDelay: `${index * 150 + 800}ms` }}
                     >
-                      <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold animate-pulse">
+                      <div className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold animate-pulse shadow-lg">
                         {index + 1}
                       </div>
-                      <span className="text-foreground">{step}</span>
+                      <span className="text-foreground font-medium text-lg">{step}</span>
                     </div>
                   ))}
                 </div>
@@ -216,7 +219,7 @@ export function AuthTabs() {
 
             {/* Target Users */}
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-800">
-              <h3 className="text-2xl font-semibold text-foreground">Built For</h3>
+              <h3 className="text-2xl lg:text-3xl font-semibold text-foreground">Built For Real Estate Professionals</h3>
               <div className="flex flex-wrap gap-3">
                 {[
                   "Real Estate Private Equity",
@@ -229,7 +232,7 @@ export function AuthTabs() {
                   <Badge
                     key={index}
                     variant="outline"
-                    className="px-3 py-1 animate-in fade-in slide-in-from-bottom-1 duration-300 ease-out hover:scale-110 hover:bg-primary/10 transition-all cursor-pointer"
+                    className="px-4 py-2 animate-in fade-in slide-in-from-bottom-1 duration-300 ease-out hover:scale-110 hover:bg-primary/10 transition-all cursor-pointer text-sm font-medium border-2"
                     style={{ animationDelay: `${index * 100 + 900}ms` }}
                   >
                     <Users className="h-3 w-3 mr-1" />
@@ -250,21 +253,22 @@ export function AuthTabs() {
                     <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-green-900 dark:text-green-100 mb-2">The Impact</h3>
+                    <h3 className="font-semibold text-green-900 dark:text-green-100 mb-3 text-lg">Transform Your Investment Process</h3>
                     <ul className="space-y-1 text-green-800 dark:text-green-200 text-sm">
                       {[
-                        "Save 95% of analysis time",
-                        "Eliminate manual data entry",
-                        "Reduce analyst costs by thousands",
-                        "Make faster, data-driven decisions",
+                        "⚡ Save 95% of analysis time - from hours to seconds",
+                        "🤖 Eliminate manual data entry with AI extraction",
+                        "💰 Reduce analyst costs by thousands per month",
+                        "📈 Make faster, data-driven investment decisions",
+                        "🎯 Institutional-grade accuracy for every deal",
                       ].map((item, index) => (
                         <li
                           key={index}
-                          className="flex items-center animate-in fade-in slide-in-from-left-2 duration-400 ease-out"
+                          className="flex items-start animate-in fade-in slide-in-from-left-2 duration-400 ease-out py-1"
                           style={{ animationDelay: `${index * 100 + 1000}ms` }}
                         >
-                          <CheckCircle2 className="h-4 w-4 mr-2 animate-pulse" />
-                          {item}
+                          <CheckCircle2 className="h-4 w-4 mr-3 mt-0.5 animate-pulse flex-shrink-0" />
+                          <span className="leading-relaxed">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -286,15 +290,15 @@ export function AuthTabs() {
               <CardHeader className="space-y-4 text-center pb-6">
                 <div className="space-y-2">
                   <CardTitle className="text-2xl animate-in fade-in slide-in-from-top-2 duration-500 ease-out delay-400">
-                    Get Started Today
+                    Start Your Free Analysis
                   </CardTitle>
                   <CardDescription className="text-base animate-in fade-in slide-in-from-top-2 duration-500 ease-out delay-500">
-                    Join the future of real estate underwriting
+                    Join thousands of real estate professionals using AI-powered analysis
                   </CardDescription>
                 </div>
-                <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2 duration-500 ease-out delay-600">
+                <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2 duration-500 ease-out delay-600 bg-blue-50/50 dark:bg-blue-950/20 rounded-full px-4 py-2">
                   <Zap className="h-4 w-4 text-primary animate-pulse" />
-                  <span>Free trial • No credit card required</span>
+                  <span className="font-medium">Free trial • No credit card required • Instant access</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -345,12 +349,12 @@ export function AuthTabs() {
 
             {/* Trust Indicators */}
             <div className="text-center space-y-3 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out delay-900">
-              <p className="text-sm text-muted-foreground">Trusted by real estate professionals</p>
+              <p className="text-sm text-muted-foreground font-medium">Trusted by real estate professionals nationwide</p>
               <div className="flex items-center justify-center space-x-6 opacity-60">
                 {["PRIVATE EQUITY", "SYNDICATORS", "FAMILY OFFICES"].map((text, index) => (
                   <div
                     key={text}
-                    className="text-xs font-semibold animate-in fade-in slide-in-from-bottom-1 duration-300 ease-out hover:opacity-100 transition-opacity"
+                    className="text-xs font-bold tracking-wider animate-in fade-in slide-in-from-bottom-1 duration-300 ease-out hover:opacity-100 transition-opacity"
                     style={{ animationDelay: `${index * 200 + 1000}ms` }}
                   >
                     {text}

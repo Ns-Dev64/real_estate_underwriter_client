@@ -16,6 +16,8 @@ interface AuthContextType {
   register: (email: string, userName: string, password: string) => Promise<void>;
   logout: () => void;
   setUser: (user: User | null) => void;
+  refreshToken: () => Promise<boolean>;
+  makeAuthenticatedRequest: (url: string, options?: RequestInit) => Promise<Response>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -61,6 +63,88 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setLoading(false);
   }, []);
+
+  const refreshToken = async (): Promise<boolean> => {
+    try {
+      const refreshTokenValue = localStorage.getItem('refresh');
+      if (!refreshTokenValue) {
+        return false;
+      }
+
+      const response = await fetch(`${config.BACKEND_URL}/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken: refreshTokenValue }),
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const data = await response.json();
+      const newToken = data.token || data.data?.token;
+      const userName = data.userName || data.data?.userName;
+
+      if (newToken) {
+        localStorage.setItem('token', newToken);
+        
+        // Update user data if we have userName
+        if (userName && user) {
+          const updatedUser = { ...user, userName };
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          setUser(updatedUser);
+        }
+        
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return false;
+    }
+  };
+
+  const makeAuthenticatedRequest = async (url: string, options: RequestInit = {}): Promise<Response> => {
+    const token = localStorage.getItem('token');
+    
+    const requestOptions = {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+
+    let response = await fetch(url, requestOptions);
+
+    // If request fails with 401, try to refresh token
+    if (response.status === 401) {
+      const refreshSuccess = await refreshToken();
+      
+      if (refreshSuccess) {
+        // Retry the request with new token
+        const newToken = localStorage.getItem('token');
+        const retryOptions = {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${newToken}`,
+          },
+        };
+        response = await fetch(url, retryOptions);
+      } else {
+        // Refresh failed, logout user
+        logout();
+        window.location.href = '/';
+        throw new Error('Authentication failed');
+      }
+    }
+
+    return response;
+  };
 
   const login = async (email: string, password: string) => {
     const response = await fetch(`${config.BACKEND_URL}/login`, {
@@ -124,7 +208,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const contextValue = { user, loading, login, register, logout, setUser: setUserWithPersistence };
+  const contextValue = { 
+    user, 
+    loading, 
+    login, 
+    register, 
+    logout, 
+    setUser: setUserWithPersistence,
+    refreshToken,
+    makeAuthenticatedRequest
+  };
 
   return (
     <AuthContext.Provider value={contextValue}>
@@ -140,4 +233,3 @@ export function useAuth() {
   }
   return context;
 }
-

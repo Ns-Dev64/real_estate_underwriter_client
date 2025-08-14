@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, Loader2, CheckCircle } from 'lucide-react';
 import { PropertyDetails } from './dashboard';
+import { useAuth } from '@/hooks/use-auth';
 import {config} from "@/lib/config"
 interface PropertySearchProps {
   onPropertyDetails: (details: PropertyDetails) => void;
@@ -18,6 +19,7 @@ export function PropertySearch({ onPropertyDetails, propertyDetails,disabled }: 
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { makeAuthenticatedRequest } = useAuth();
 
    const handleSearch = async () => {
     if (!address.trim()) return;
@@ -26,13 +28,8 @@ export function PropertySearch({ onPropertyDetails, propertyDetails,disabled }: 
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
       localStorage.setItem("address",address);
-      const response = await fetch(`${config.BACKEND_URL}/property?address=${address}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await makeAuthenticatedRequest(`${config.BACKEND_URL}/property?address=${address}`);
   
       if (!response.ok) {
         throw new Error('Failed to fetch property details');
