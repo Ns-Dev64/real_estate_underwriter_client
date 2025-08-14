@@ -80,3 +80,94 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Real Estate Theme Colors */
+:root {
+  --real-estate-primary: 59 130 246; /* blue-500 */
+  --real-estate-secondary: 16 185 129; /* emerald-500 */
+  --real-estate-accent: 245 158 11; /* amber-500 */
+  --real-estate-success: 34 197 94; /* green-500 */
+  --real-estate-warning: 251 191 36; /* yellow-400 */
+  --real-estate-error: 239 68 68; /* red-500 */
+  --real-estate-info: 14 165 233; /* sky-500 */
+  --real-estate-neutral: 107 114 128; /* gray-500 */
+}
+
+.dark {
+  --real-estate-primary: 96 165 250; /* blue-400 */
+  --real-estate-secondary: 52 211 153; /* emerald-400 */
+  --real-estate-accent: 251 191 36; /* amber-400 */
+  --real-estate-success: 74 222 128; /* green-400 */
+  --real-estate-warning: 250 204 21; /* yellow-400 */
+  --real-estate-error: 248 113 113; /* red-400 */
+  --real-estate-info: 56 189 248; /* sky-400 */
+  --real-estate-neutral: 156 163 175; /* gray-400 */
+}
+
+/* Utility Classes */
+.text-real-estate-primary { color: rgb(var(--real-estate-primary)); }
+.text-real-estate-secondary { color: rgb(var(--real-estate-secondary)); }
+.text-real-estate-accent { color: rgb(var(--real-estate-accent)); }
+.text-real-estate-success { color: rgb(var(--real-estate-success)); }
+.text-real-estate-warning { color: rgb(var(--real-estate-warning)); }
+.text-real-estate-error { color: rgb(var(--real-estate-error)); }
+.text-real-estate-info { color: rgb(var(--real-estate-info)); }
+.text-real-estate-neutral { color: rgb(var(--real-estate-neutral)); }
+
+.bg-real-estate-primary { background-color: rgb(var(--real-estate-primary)); }
+.bg-real-estate-secondary { background-color: rgb(var(--real-estate-secondary)); }
+.bg-real-estate-accent { background-color: rgb(var(--real-estate-accent)); }
+.bg-real-estate-success { background-color: rgb(var(--real-estate-success)); }
+.bg-real-estate-warning { background-color: rgb(var(--real-estate-warning)); }
+.bg-real-estate-error { background-color: rgb(var(--real-estate-error)); }
+.bg-real-estate-info { background-color: rgb(var(--real-estate-info)); }
+.bg-real-estate-neutral { background-color: rgb(var(--real-estate-neutral)); }
+
+.border-real-estate-primary { border-color: rgb(var(--real-estate-primary)); }
+.border-real-estate-secondary { border-color: rgb(var(--real-estate-secondary)); }
+.border-real-estate-accent { border-color: rgb(var(--real-estate-accent)); }
+.border-real-estate-success { border-color: rgb(var(--real-estate-success)); }
+.border-real-estate-warning { border-color: rgb(var(--real-estate-warning)); }
+.border-real-estate-error { border-color: rgb(var(--real-estate-error)); }
+.border-real-estate-info { border-color: rgb(var(--real-estate-info)); }
+.border-real-estate-neutral { border-color: rgb(var(--real-estate-neutral)); }
+
+/* Gradient Classes */
+.text-real-estate-gradient {
+  background: linear-gradient(135deg, rgb(var(--real-estate-primary)), rgb(var(--real-estate-secondary)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-real-estate-gradient {
+  background: linear-gradient(135deg, rgb(var(--real-estate-primary)), rgb(var(--real-estate-secondary)));
+}
+
+/* Card Styles */
+.real-estate-card {
+  @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50;
+}
+
+.real-estate-card-premium {
+  @apply bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-2 border-gray-200/60 dark:border-gray-700/60;
+}
+
+/* Animation Classes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgb(var(--real-estate-primary) / 0.5); }
+  50% { box-shadow: 0 0 20px rgb(var(--real-estate-primary) / 0.8), 0 0 30px rgb(var(--real-estate-primary) / 0.4); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
